@@ -25,11 +25,15 @@ Configure weight rates for the regions you want to ship to.
 
 Note: Your browser must support Javascript, and you must have it enabled to configure the shipping rates.
 
-
 == Frequently Asked Questions ==
 
 * I installed it, but nothing is showing up in my shipping settings?
 Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-Commerce. If you need to use this on an earlier version you'll need to apply a small change to core WP E-Commerce. The line to add is [documented here](http://plugins.trac.wordpress.org/changeset/198151/wp-e-commerce/trunk/wp-shopping-cart.php)
+
+== Screenshots ==
+
+1. Picking a region to configure
+2. Setting weight bands per region
 
 == Changelog ==
 
