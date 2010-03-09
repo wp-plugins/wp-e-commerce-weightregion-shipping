@@ -3,7 +3,7 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 1.0
+Stable tag: 1.1
 
 Shipping module for the WP E-Commerce system that offers a matrix of weight / region combinations.
 
@@ -36,6 +36,9 @@ Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-C
 2. Setting weight bands per region
 
 == Changelog ==
+
+= 1.1 =
+UI Bugfixes in the admin area
 
 = 1.0 =
 * Initial Release
