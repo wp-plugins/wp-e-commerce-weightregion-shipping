@@ -3,7 +3,7 @@
  Plugin Name: WP E-Commerce Weight & Destination Shipping Module
  Plugin URI: http://www.leewillis.co.uk/wordpress-plugins/
  Description: Shipping Module For WP E-Commerce bases prices on region and weight bands
- Version: 1.0
+ Version: 1.1
  Author: Lee Willis
  Author URI: http://www.leewillis.co.uk/
 */
@@ -83,8 +83,8 @@ class ses_weightregion_shipping {
 		echo '<br/>';
 		echo '<a id="ses-weightregion-newlayer">New Layer</a>';
 		echo '<script type="text/javascript">
-                        jQuery("div.inside div.submit").expire();
-			jQuery("div.inside div.submit").livequery(function() { jQuery(this).show();});
+                        jQuery("td.gateway_settings div.inside div.submit").expire();
+			jQuery("td.gateway_settings div.inside div.submit").livequery(function() { jQuery(this).show();});
 		      </script>';
 
 		exit();
@@ -96,7 +96,7 @@ class ses_weightregion_shipping {
 		if (isset($_POST['region']) && $_POST['region'] != "") {
 			$output = show_layers_form($_POST['region']);
 		} else {
-			$output = '<div align="center"><div class="donate" style="background: rgb(255,247,124); padding: 5px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 180px;">This plugin is provided free of charge. If you find it useful, you should<strong><br><a href="http://www.leewillis.co.uk/wordpress-plugins/">donate here</a></strong></div></div>';
+			$output = '<tr><td><div align="center"><div class="donate" style="background: rgb(255,247,124); padding: 5px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 180px;">This plugin is provided free of charge. If you find it useful, you should<strong><br><a href="http://www.leewillis.co.uk/wordpress-plugins/">donate here</a></strong></div></div>';
 			$output .= "<br/>Pick a region to configure the weight layers:<br/><br/>";
 			$output .= '<select id="ses-weightregion-select" name="region"><option value="">-- Choose --</option>';
 			foreach ($this->region_list as $region_id => $region_desc) {
@@ -105,8 +105,8 @@ class ses_weightregion_shipping {
 			$output .= '
 		        </select>
 		        <script type="text/javascript">
-                           jQuery("div.inside div.submit").expire();
-			   jQuery("div.inside div.submit").livequery(function() { jQuery(this).hide("slow");});
+                           jQuery("td.gateway_settings div.inside div.submit").expire();
+			   jQuery("td.gateway_settings div.inside div.submit").livequery(function() { jQuery(this).hide("slow");});
                            jQuery("#ses-weightregion-select").change(function() {
 		             jQuery.ajax( { url: "admin-ajax.php?action=ses-weightregion-layers&region="+jQuery(this).val(),
                                         success: function(data) { jQuery("td.gateway_settings table.form-table").html(data); }
@@ -115,7 +115,7 @@ class ses_weightregion_shipping {
                            jQuery("#ses-weightregion-newlayer").expire();
                            jQuery("#ses-weightregion-newlayer").livequery("click", function(event){
 			     jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
-		        </script>
+		        </script></td></tr>
 			';
 		}
 		return $output;
