@@ -37,6 +37,10 @@ Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-C
 
 == Changelog ==
 
+= 1.2 =
+Compatibility with WP e-Commerce 3.7.6
+Don't hardcode regions - pull them from {prefix}wpsc_currency_list
+
 = 1.1 =
 UI Bugfixes in the admin area
 

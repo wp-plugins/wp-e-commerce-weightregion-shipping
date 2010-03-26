@@ -3,7 +3,7 @@
  Plugin Name: WP E-Commerce Weight & Destination Shipping Module
  Plugin URI: http://www.leewillis.co.uk/wordpress-plugins/
  Description: Shipping Module For WP E-Commerce bases prices on region and weight bands
- Version: 1.1
+ Version: 1.2
  Author: Lee Willis
  Author URI: http://www.leewillis.co.uk/
 */
@@ -20,18 +20,53 @@ class ses_weightregion_shipping {
 	var $name;
 	var $is_external;
 
-	var $region_list = Array('local' => 'Local',
-	                         'northamerica' => 'North America',
-	                         'southamerica' => 'South America',
-				 'asiapacific' => 'Asia and Pacific',
-	                         'europe' => 'Europe',
-	                         'africa' => 'Africa');
+	var $region_list;
+
+	function ses_weightregion_getregions() {
+	
+		global $wpdb, $table_prefix;
+
+		$standard_continents = Array('local' => 'Local',
+		                             'northamerica' => 'North America',
+       		                             'southamerica' => 'South America',
+		                             'asiapacific' => 'Asia and Pacific',
+		                             'europe' => 'Europe',
+		                             'africa' => 'Africa');
+
+		$sql = "SELECT DISTINCT(continent)
+		          FROM {$table_prefix}wpsc_currency_list";
+
+		$continents = $wpdb->get_results($sql, ARRAY_A);
+
+		$results = Array();
+
+		if (count($continents)) {
+
+			foreach ($continents as $continent) {
+
+				if ($continent['continent']=='')
+					continue;
+
+				if (isset($standard_continents[$continent['continent']])) {
+					$results[$continent['continent']] = $standard_continents[$continent['continent']];
+				} else {
+					$results[$continent['continent']] = $continent['continent'];
+				}
+
+			}
+
+		}
+
+		$this->region_list = $results;
+	
+	}
 
 	function ses_weightregion_shipping () {
 
 		$this->internal_name = "ses_weightregion_shipping";
 		$this->name = "Weight / Region Shipping";
 		$this->is_external = FALSE;
+		$this->ses_weightregion_getregions();
 		return true;
 	}
 	
