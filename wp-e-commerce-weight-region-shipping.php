@@ -196,9 +196,14 @@ class ses_weightregion_shipping {
          * as-is on the product pages. It is also included in the final cart & checkout figure along
          * with the results from GetQuote (below) */
 
-	function get_item_shipping($unit_price, $quantity, $weight, $product_id) {
+	function get_item_shipping(&$cart_item) {
 
 		global $wpdb;
+
+		$product_id = $cart_item->product_id;
+                $quantity = $cart_item->quantity;
+                $weight = $cart_item->weight;
+                $unit_price = $cart_item->unit_price;
 
 		// If we're calculating a price based on a product, and that the store has shipping enabled
 
