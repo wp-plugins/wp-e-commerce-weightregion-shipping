@@ -279,15 +279,11 @@ class ses_weightregion_shipping {
 		// Retrieve the options set by submit_form() above
 		$shipping = get_option($this->getInternalName().'_options');
 
-		if (get_option('base_country') == $country) {
-			$region = "local";
-		} else {
-			$results = $wpdb->get_var("SELECT `continent`
-			                             FROM `".WPSC_TABLE_CURRENCY_LIST."`
-			                            WHERE `isocode` IN('{$country}')
-			                            LIMIT 1");
-			$region = $results;
-		}
+		$results = $wpdb->get_var("SELECT `continent`
+		                             FROM `".WPSC_TABLE_CURRENCY_LIST."`
+		                            WHERE `isocode` IN('{$country}')
+		                            LIMIT 1");
+		$region = $results;
 		
 		if (isset($shipping[$region]) && count($shipping[$region])) {
 			$layers = $shipping[$region]; 
