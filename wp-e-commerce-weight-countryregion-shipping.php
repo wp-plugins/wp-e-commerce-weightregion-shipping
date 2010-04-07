@@ -210,6 +210,8 @@ class ses_weightcountryregion_shipping {
 		if (isset($_POST['country'])) {
 			$country = $_POST['country'];
 			$_SESSION['wpsc_delivery_country'] = $country;
+		} else {
+			$country = $_SESSION['wpsc_delivery_country'];
 		}
 
 		$sql = "SELECT id FROM {$table_prefix}wpsc_currency_list WHERE isocode=%s";
@@ -218,6 +220,8 @@ class ses_weightcountryregion_shipping {
 		if (isset($_POST['region'])) {
 			$region = $_POST['region'];
 			$_SESSION['wpsc_delivery_region'] = $region;
+		} else {
+			$region = $_SESSION['wpsc_delivery_region'];
 		}
 
 		// Check that the region is valid for this country (For when we're changing coutries)
@@ -247,6 +251,8 @@ class ses_weightcountryregion_shipping {
 		// If we're calculating a price based on a product, and that the store has shipping enabled
 
     		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+
+			$country_id = $this->validate_posted_country_info();
 
 			$country_code = $_SESSION['wpsc_delivery_country'];
 			if (isset($_SESSION['wpsc_delivery_region'])) {
@@ -334,6 +340,7 @@ class ses_weightcountryregion_shipping {
 		// Here we assume that they're in (descending) order
 		foreach ($layers as $key => $shipping) {
 			if ($weight >= (float)$key) {
+				echo "<!-- getQuote returning $shipping -->";
 				return array("Shipping"=>(float)$shipping);
 			}
 		}

@@ -217,6 +217,37 @@ class ses_weightregion_shipping {
 
 	}
 	
+	function validate_posted_country_info() {
+
+		global $wpdb, $table_prefix;
+
+		if (isset($_POST['country'])) {
+			$country = $_POST['country'];
+			$_SESSION['wpsc_delivery_country'] = $country;
+		} else {
+			$country = $_SESSION['wpsc_delivery_country'];
+		}
+
+		$sql = "SELECT id FROM {$table_prefix}wpsc_currency_list WHERE isocode=%s";
+		$country_id = $wpdb->get_var($wpdb->prepare($sql, $country));
+
+		if (isset($_POST['region'])) {
+			$region = $_POST['region'];
+			$_SESSION['wpsc_delivery_region'] = $region;
+		} else {
+			$region = $_SESSION['wpsc_delivery_region'];
+		}
+
+		// Check that the region is valid for this country (For when we're changing coutries)
+		$sql = "SELECT id FROM {$table_prefix}wpsc_region_tax WHERE id = %s and country_id = %s";
+		$region_id = $wpdb->get_var($wpdb->prepare($sql, $region, $country_id));
+		if ($region_id != $region) {
+			unset($_SESSION['wpsc_delivery_region']);
+		}
+
+		return $country_id;
+	}
+
 	/* If there is a per-item shipping charge that applies irrespective of the chosen shipping method
          * then it should be calculated and returned here. The value returned from this function is used
          * as-is on the product pages. It is also included in the final cart & checkout figure along
@@ -235,6 +266,7 @@ class ses_weightregion_shipping {
 
     		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
 
+			$country_id = $this->validate_posted_country_info();
 			$country_code = $_SESSION['wpsc_delivery_country'];
 
 			// Get product information
@@ -291,17 +323,9 @@ class ses_weightregion_shipping {
 		// Get the cart weight
 		$weight = wpsc_cart_weight_total();
 
-		// Get the weight layers for this country
-		if (isset($_POST['country'])) {
+		$country_id = $this->validate_posted_country_info();
+		$country = $_SESSION['wpsc_delivery_country'];
 
-			$country = $_POST['country'];
-			$_SESSION['wpsc_delivery_country'] = $country;
-
-		} else {
-
-			$country = $_SESSION['wpsc_delivery_country'];
-
-		}
 		// Retrieve the options set by submit_form() above
 		$shipping = get_option($this->getInternalName().'_options');
 
