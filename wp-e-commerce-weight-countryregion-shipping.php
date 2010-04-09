@@ -340,7 +340,6 @@ class ses_weightcountryregion_shipping {
 		// Here we assume that they're in (descending) order
 		foreach ($layers as $key => $shipping) {
 			if ($weight >= (float)$key) {
-				echo "<!-- getQuote returning $shipping -->";
 				return array("Shipping"=>(float)$shipping);
 			}
 		}
