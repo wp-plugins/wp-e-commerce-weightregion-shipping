@@ -3,7 +3,7 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 2.0
+Stable tag: 2.1
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
 
