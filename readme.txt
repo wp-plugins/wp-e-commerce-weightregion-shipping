@@ -3,13 +3,17 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 1.1
+Stable tag: 2.1
 
-Shipping module for the WP E-Commerce system that offers a matrix of weight / region combinations.
+Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
 
 == Description ==
 
-Shipping module for the WP E-Commerce system that offers a matrix of weight / region combinations.
+This plugin provides two shipping modules for the WP E-Commerce system that offer shipping:
+- By weight and continent
+- By weight and country / region
+
+Both modules can be used at the same time - see (http://www.leewillis.co.uk/region-based-shipping-wp-e-commerce/)
 
 == Installation ==
 
@@ -19,9 +23,11 @@ Shipping module for the WP E-Commerce system that offers a matrix of weight / re
 
 Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-Commerce. If you need to use this on an earlier version you'll need to apply a small change to core WP E-Commerce. The line to add is [documented here](http://plugins.trac.wordpress.org/changeset/198151/wp-e-commerce/trunk/wp-shopping-cart.php)
 
-Make sure that the shipping method is selected ( Products >> Settings >> Shipping - Tick "Weight / Region Shipping" )
+2. Install the plugin
 
-Configure weight rates for the regions you want to ship to.
+3. Make sure that the chosen shipping method is selected ( Products >> Settings >> Shipping ). Tick "Weight / Continent Shipping" and/or "Weight / Country and Region Shipping")
+
+Configure weight rates for the areas you want to ship to.
 
 Note: Your browser must support Javascript, and you must have it enabled to configure the shipping rates.
 
@@ -36,6 +42,9 @@ Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-C
 2. Setting weight bands per region
 
 == Changelog ==
+
+= 2.0 =
+Offer two modules - one based on country (Optionally including a region), and one based on continents. You can use both of these at once if required to give specific pricing for a certain country and regions, plus blanket pricing for the other continents
 
 = 1.2 =
 Compatibility with WP e-Commerce 3.7.6
