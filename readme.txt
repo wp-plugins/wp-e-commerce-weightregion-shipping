@@ -3,13 +3,17 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 1.1
+Stable tag: 2.0
 
-Shipping module for the WP E-Commerce system that offers a matrix of weight / region combinations.
+Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
 
 == Description ==
 
-Shipping module for the WP E-Commerce system that offers a matrix of weight / region combinations.
+This plugin provides two shipping modules for the WP E-Commerce system that offer shipping:
+- By weight and continent
+- By weight and country / region
+
+Both modules can be used at the same time - see (http://www.leewillis.co.uk/region-based-shipping-wp-e-commerce/)
 
 == Installation ==
 
