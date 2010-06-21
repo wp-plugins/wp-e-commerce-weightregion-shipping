@@ -29,8 +29,6 @@ function ses_weightregion_shipping_add($wpsc_shipping_modules) {
 	return $wpsc_shipping_modules;
 }
 	
-add_filter('wpsc_shipping_modules', 'ses_weightregion_shipping_add');
-add_action('wp_ajax_ses-weightregion-layers',array(&$ses_weightregion_shipping,"show_layers_form"));
 
 
 
@@ -47,8 +45,14 @@ function ses_weightcountryregion_shipping_add($wpsc_shipping_modules) {
 
 	return $wpsc_shipping_modules;
 }
-	
+
 add_filter('wpsc_shipping_modules', 'ses_weightcountryregion_shipping_add');
+add_filter('wpsc_shipping_modules', 'ses_weightregion_shipping_add');
+add_action('wp_ajax_ses-weightregion-layers',array(&$ses_weightregion_shipping,"show_layers_form"));
 add_action('wp_ajax_ses-weightcountryregion-layers',array(&$ses_weightcountryregion_shipping,"show_layers_form"));
+
+if (is_admin()) {
+	require_once ('wp-e-commerce-weight-region-region-manager.php');
+}
 
 ?>
