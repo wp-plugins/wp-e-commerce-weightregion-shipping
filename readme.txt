@@ -3,7 +3,7 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 2.1
+Stable tag: 3.0
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
 
@@ -42,6 +42,9 @@ Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-C
 2. Setting weight bands per region
 
 == Changelog ==
+
+= 3.0 =
+Online tool to allow you to edit regions through the WordPress admin area. Courtest of Instinct and Sam @ Hotchkiss Consulting (http://hotchkissconsulting.net/)
 
 = 2.0 =
 Offer two modules - one based on country (Optionally including a region), and one based on continents. You can use both of these at once if required to give specific pricing for a certain country and regions, plus blanket pricing for the other continents
