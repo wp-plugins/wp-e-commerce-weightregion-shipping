@@ -15,6 +15,8 @@ This plugin provides two shipping modules for the WP E-Commerce system that offe
 
 Both modules can be used at the same time - see (http://www.leewillis.co.uk/region-based-shipping-wp-e-commerce/)
 
+This plugin also provides an online tool to allow you to split countries into whatever regions are relevant for your business.
+
 == Installation ==
 
 *You Must* already have the following plugin installed:
