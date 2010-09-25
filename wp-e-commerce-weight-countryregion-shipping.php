@@ -162,8 +162,28 @@ class ses_weightcountryregion_shipping {
                            jQuery("#ses-weightcountryregion-newlayer").expire();
                            jQuery("#ses-weightcountryregion-newlayer").livequery("click", function(event){
 			     jQuery("#ses-weightcountryregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\"> Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
-		        </script></td></tr>
-			';
+		        </script>';
+			$options = get_option($this->getInternalName().'_options');
+			if (!isset($options['quote_method'])) {
+				$options['quote_method'] = 'total';
+			}
+			$output .= '<br/>Prices based on:<br/>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="total" '.($options['quote_method'] == 'total' ? 'checked' : '').'>Single quote for total cart weight<br>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="items" '.($options['quote_method'] == 'items' ? 'checked' : '').'>Sum of quotes for individual items<br>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked' : '').'>Sum of quotes for consolidated items<br>';
+			$output .= '
+		        <script type="text/javascript">
+				jQuery("input[name=\'quote_method\']").change(function() {
+					jQuery.ajax( { url: "admin-ajax.php",
+						           type: "post",
+								   data: "action=ses-weightcountryregion-quote-method&quote_method="+jQuery("input[name=\'quote_method\']:checked").val(),
+								 }
+							   )
+					}
+				);
+				</script>';
+			$output .= '</td></tr>';
+
 		}
 		return $output;
 	}
@@ -203,6 +223,24 @@ class ses_weightcountryregion_shipping {
 
 	}
 	
+	function save_quote_method() {
+
+		// Called via Ajax if the quote method is changed
+		if (!isset($_POST['quote_method'])) {
+			return FALSE; 
+		}
+
+		$options = get_option($this->getInternalName().'_options');
+        if (!$options) {
+            unset($option);
+        }
+
+		$options['quote_method'] = $_POST['quote_method'];
+
+		update_option($this->getInternalName().'_options',$options);
+
+	}
+
 	function validate_posted_country_info() {
 
 		global $wpdb, $table_prefix;
@@ -312,8 +350,8 @@ class ses_weightcountryregion_shipping {
 
 		global $wpdb, $wpsc_cart, $table_prefix;
 
-		// Get the cart weight
-		$weight = wpsc_cart_weight_total();
+		// Get the plugin options
+		$options = get_option($this->getInternalName().'_options');
 
 		$country_id = $this->validate_posted_country_info();
 
@@ -324,29 +362,61 @@ class ses_weightcountryregion_shipping {
 			$region = '';
 		}
 
-		// Get the weight layers for this country
-		$shipping = get_option($this->getInternalName().'_options');
-
 		$composite_key = $country_id."|".$region;
 
-		if (isset($shipping[$composite_key]) && count($shipping[$composite_key])) {
-			$layers = $shipping[$composite_key]; 
+		// Get the weight layers for this country
+		if (isset($options[$composite_key]) && count($options[$composite_key])) {
+			$layers = $options[$composite_key]; 
 		} else {
 			// No shipping layers configured for this region
 			return Array();
 		}
+			
+		if (!isset($options['quote_method']) ||
+			$options['quote_method'] == 'total') {
+
+			// Get the cart weight
+			$weight = wpsc_cart_weight_total();
+	
+			// Note the weight layers are sorted before being saved into the options
+			// Here we assume that they're in (descending) order
+			foreach ($layers as $key => $shipping) {
+				if ($weight >= (float)$key) {
+					return array("Shipping"=>(float)$shipping);
+				}
+			}
+
+			// We couldn't find a rate - exit out.
+			return Array();
 		
-		// Note the weight layers are sorted before being saved into the options
-		// Here we assume that they're in (descending) order
-		foreach ($layers as $key => $shipping) {
-			if ($weight >= (float)$key) {
-				return array("Shipping"=>(float)$shipping);
+		} else {
+
+			if (isset($wpsc_cart) && isset($wpsc_cart->cart_items) && count($wpsc_cart->cart_items)) {
+
+				$subtotal = 0;
+				foreach ($wpsc_cart->cart_items as $cart_item) {
+
+					foreach ($layers as $key => $shipping) {
+
+						//print_r($cart_item);
+						if ($options['quote_method'] == 'items') {
+							if ($cart_item->weight >= (float)$key) {
+								$subtotal += (float)($shipping * $cart_item->quantity);
+								break;
+							}
+						} elseif ($options['quote_method'] == 'consolidateditems') {
+							if (($cart_item->weight * $cart_item->quantity) >= (float)$key) {
+								$subtotal += (float)$shipping;
+								break;
+							}
+						}
+
+					}
+
+				}
+				return array("Shipping"=>(float)$subtotal);
 			}
 		}
-
-		// We couldn't find a rate - exit out.
-		return Array();
-		
 	}
 	
 	
