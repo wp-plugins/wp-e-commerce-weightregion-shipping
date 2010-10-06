@@ -201,7 +201,7 @@ function manage_wpsc_regions() {
 	<div class="wrap"><h2>Region Settings</h2>
 		<form action="" id="country_select_form" method="post" accept-charset="utf-8">
 		<input type="hidden" name="action" value="get_country_callback" id="action">
-		Select a country to modify its regions: <select name="country" id="country"  onchange="switch_countries();" size="1" />
+		Select a country to modify its regions: <select name="country" id="country"  onchange="switch_countries();" size="1">
 			<?php
 				foreach($countries as $c) :
 			?>
