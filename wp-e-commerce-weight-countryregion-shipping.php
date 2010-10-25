@@ -210,14 +210,25 @@ class ses_weightcountryregion_shipping {
 		$weights = $_POST[$this->getInternalName().'_weights'];
 		$rates = $_POST[$this->getInternalName().'_rates'];
 
+		$new_shipping = Array();
+
 		// Build submitted data into correct format
 		for ($i = 0; $i < count($weights); $i++) {
-			$new_shipping[$weights[$i]] = $rates[$i];
+
+			// Ignore blank rates
+			if (isset($rates[$i]) && $rates[$i] != "") {
+				$new_shipping[$weights[$i]] = $rates[$i];
+			}
+
 		}
-		krsort($new_shipping,SORT_NUMERIC);
-		$shipping[$region] = $new_shipping;
-			
-		update_option($this->getInternalName().'_options',$shipping);
+
+		if (count($new_shipping)) {
+
+			krsort($new_shipping,SORT_NUMERIC);
+			$shipping[$region] = $new_shipping;
+			update_option($this->getInternalName().'_options',$shipping);
+
+		}
 
 		return true;
 
@@ -371,6 +382,17 @@ class ses_weightcountryregion_shipping {
 			// No shipping layers configured for this region
 			return Array();
 		}
+
+		// Previous releases had a bug where "empty" config settings could be saved
+		// We strip them out here
+		foreach ($layers as $key => $value) {
+			if ($value == '') {
+				unset ($layers[$key]);
+			}
+		}
+		if (!count($layers)) {
+			return Array();
+		}
 			
 		if (!isset($options['quote_method']) ||
 			$options['quote_method'] == 'total') {
@@ -398,7 +420,6 @@ class ses_weightcountryregion_shipping {
 
 					foreach ($layers as $key => $shipping) {
 
-						//print_r($cart_item);
 						if ($options['quote_method'] == 'items') {
 							if ($cart_item->weight >= (float)$key) {
 								$subtotal += (float)($shipping * $cart_item->quantity);
