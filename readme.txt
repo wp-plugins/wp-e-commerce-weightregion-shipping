@@ -41,6 +41,12 @@ Note: Your browser must support Javascript, and you must have it enabled to conf
 * I installed it, but nothing is showing up in my shipping settings?
 Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-Commerce. If you need to use this on an earlier version you'll need to apply a small change to core WP E-Commerce. The line to add is [documented here](http://plugins.trac.wordpress.org/changeset/198151/wp-e-commerce/trunk/wp-shopping-cart.php)
 
+* I'm on the right version of WP e-Commerce, but the shipping settings still aren't showing up!
+If you're using Gold Cart from getshopped.org, check you have the newest release. Earlier releases had a bug which broke external shipping plugins.
+
+* The weight rates aren't getting calculated / don't change when I add more products?
+Make sure you have a weight rate for "0 and above". Also ensure that you've entered shipping weights in pounds (lbs), regardless of what units you've set your products up in. 
+
 * What is the difference between the various charging methods?
 The plugin offers three different ways of mapping a customers order onto your weight bands. 
 
