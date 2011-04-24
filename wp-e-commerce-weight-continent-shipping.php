@@ -306,56 +306,72 @@ class ses_weightregion_shipping {
 		global $wpdb;
 
 		$product_id = $cart_item->product_id;
-                $quantity = $cart_item->quantity;
-                $weight = $cart_item->weight;
-                $unit_price = $cart_item->unit_price;
+        $quantity = $cart_item->quantity;
+        $weight = $cart_item->weight;
+        $unit_price = $cart_item->unit_price;
 
 		// If we're calculating a price based on a product, and that the store has shipping enabled
 
-    		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+    	if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
 
 			$country_id = $this->validate_posted_country_info();
 			$country_code = $_SESSION['wpsc_delivery_country'];
 
-			// Get product information
-      			$product_list = $wpdb->get_row("SELECT *
-			                                  FROM `".WPSC_TABLE_PRODUCT_LIST."`
-				                         WHERE `id`='{$product_id}'
-			                                 LIMIT 1",ARRAY_A);
+			if ( ! defined ( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
 
-       			// If the item has shipping enabled
-      			if($product_list['no_shipping'] == 0) {
+				// Get product information
+	    		$product_list = $wpdb->get_row("SELECT *
+				                                  FROM `".WPSC_TABLE_PRODUCT_LIST."`
+					                         WHERE `id`='{$product_id}'
+				                                 LIMIT 1",ARRAY_A);
 
-        			if($country_code == get_option('base_country')) {
+				$no_shipping = $product_list['no_shipping'];
+				$local_shipping = $product_list['pnp'];
+				$international_shipping = $product_list['international_pnp'];
+
+			} else {
+
+				$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
+
+				$no_shipping = $product_list['no_shipping'];
+				$local_shipping = $product_list['shipping']['local'];
+				$international_shipping = $product_list['shipping']['international'];
+
+			}
+
+	    	// If the item has shipping enabled
+		   	if($no_shipping == 0) {
+
+	    		if($country_code == get_option('base_country')) {
 
 					// Pick up the price from "Local Shipping Fee" on the product form
-          				$additional_shipping = $product_list['pnp'];
+	    			$additional_shipping = $local_shipping;
 
 				} else {
 
 					// Pick up the price from "International Shipping Fee" on the product form
-          				$additional_shipping = $product_list['international_pnp'];
+    				$additional_shipping = $international_shipping;
 
 				}          
 
 				// Item shipping charges are per unit quantity
-        			$shipping = $quantity * $additional_shipping;
+    			$shipping = $quantity * $additional_shipping;
 
 			} else {
 
-        			//if the item does not have shipping
-        			$shipping = 0;
-
+    			//if the item does not have shipping
+    			$shipping = 0;
+	
 			}
 
 		} else {
 
-      			//if the item is invalid or store is set not to use shipping
+      		//if the item is invalid or store is set not to use shipping
 			$shipping = 0;
 
 		}
 
-    		return $shipping;	
+    	return $shipping;	
 	}
 	
 
