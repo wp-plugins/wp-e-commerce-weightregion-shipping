@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: leewillis77
 Tags: e-commerce, shipping
-Requires at least: 2.8
-Tested up to: 3.0.4
-Stable tag: 4.1
+Requires at least: 3.0
+Tested up to: 3.1.2
+Stable tag: 4.2
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
 
@@ -63,6 +63,9 @@ Assumes that each item will be shipped in bundles. For each item in the cart, th
 2. Setting weight bands per region
 
 == Changelog ==
+
+= 4.2 = 
+Compatibility with WP e-Commerce 3.8
 
 = 4.1 =
 Fixed a bug where empty layers could be saved, and lead to incorrect shipping quotes
