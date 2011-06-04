@@ -1,13 +1,23 @@
 <?php
 
-add_filter('wpsc_additional_pages','region_shipping_menu');
+function region_shipping_menu() {
 
-function region_shipping_menu($menu = 'cool') {
 	if (current_user_can('manage_options')) {
-		add_submenu_page( 'wpsc-sales-logs', 'Manage Regions', 'Manage Regions', 'manage_options', 'wpsc-region-settings', 'manage_wpsc_regions');
+
+		if ( ! defined ( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
+			add_submenu_page( 'wpsc-sales-logs', 'Manage Regions', 'Manage Regions', 'manage_options', 'wpsc-region-settings', 'manage_wpsc_regions');
+		} else {
+			add_submenu_page( 'options-general.php', 'Store &raquo; Manage Regions', 'Store/Edit Regions', 'manage_options', 'wpsc-region-settings', 'manage_wpsc_regions');
+		}
 	}
+
 	return $menu;
+
 }
+
+add_action('wpsc_add_submenu','region_shipping_menu');
+
+
 
 add_action('wp_ajax_get_country_callback', 'get_country_callback');
 function get_country_callback() {
