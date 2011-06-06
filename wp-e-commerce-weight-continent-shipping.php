@@ -228,7 +228,7 @@ class ses_weightregion_shipping {
 		// Build submitted data into correct format
 		for ($i = 0; $i < count($weights); $i++) {
 
-			// Ignore blank rates
+			// Don't set rates if they're blank
 			if (isset($rates[$i]) && $rates[$i] != "") {
 				$new_shipping[$weights[$i]] = $rates[$i];
 			}
@@ -236,12 +236,11 @@ class ses_weightregion_shipping {
 		}
 
 		if (count($new_shipping)) {
-
 			krsort($new_shipping,SORT_NUMERIC);
-			$shipping[$region] = $new_shipping;
-			update_option($this->getInternalName().'_options',$shipping);
-
 		}
+
+		$shipping[$region] = $new_shipping;
+		update_option($this->getInternalName().'_options',$shipping);
 
 		return true;
 

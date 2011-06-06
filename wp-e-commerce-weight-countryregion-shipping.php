@@ -223,12 +223,10 @@ class ses_weightcountryregion_shipping {
 		}
 
 		if (count($new_shipping)) {
-
 			krsort($new_shipping,SORT_NUMERIC);
-			$shipping[$region] = $new_shipping;
-			update_option($this->getInternalName().'_options',$shipping);
-
 		}
+		$shipping[$region] = $new_shipping;
+		update_option($this->getInternalName().'_options',$shipping);
 
 		return true;
 
