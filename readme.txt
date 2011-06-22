@@ -22,7 +22,7 @@ This plugin also provides an online tool to allow you to split countries into wh
 
 == Installation ==
 
-*You Must* already have the following plugin installed:
+*You Must* already have the following plugin installed: 
 
 1. [WP e-Commerce](http://wordpress.org/extend/plugins/wp-e-commerce/)
 
