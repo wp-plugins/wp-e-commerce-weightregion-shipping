@@ -152,7 +152,7 @@ class ses_weightregion_shipping {
 	function getForm() {
 
 		if (isset($_POST['region']) && $_POST['region'] != "") {
-			$output = show_layers_form($_POST['region']);
+			$output = $this->show_layers_form($_POST['region']);
 		} else {
 			$output = '<tr><td>';
 			if (!$this->hide_donate_link()) {
@@ -333,8 +333,8 @@ class ses_weightregion_shipping {
 				$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
 
 				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = $product_list['shipping']['local'];
-				$international_shipping = $product_list['shipping']['international'];
+				$local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
+				$international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
 			}
 
