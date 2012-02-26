@@ -325,8 +325,8 @@ class ses_weightregion_shipping {
 				                                 LIMIT 1",ARRAY_A);
 
 				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = $product_list['pnp'];
-				$international_shipping = $product_list['international_pnp'];
+				$local_shipping = isset ( $product_list['pnp'] ) ? $product_list['pnp'] : 0;
+				$international_shipping = isset ( $product_list['international_pnp'] ) ? $product_list['international_pnp'] : 0;
 
 			} else {
 

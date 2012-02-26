@@ -317,16 +317,16 @@ class ses_weightcountryregion_shipping {
 				                                 LIMIT 1",ARRAY_A);
 
 				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = $product_list['pnp'];
-				$international_shipping = $product_list['international_pnp'];
+				$local_shipping = isset ( $product_list['pnp'] ) ? $product_list['pnp'] : 0;
+				$international_shipping = isset ( $product_list['international_pnp'] ) ? $product_list['international_pnp'] : 0;
 
 			} else {
 
 				$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
 
 				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = $product_list['shipping']['local'];
-				$international_shipping = $product_list['shipping']['international'];
+				$local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
+				$international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
 			}
 
