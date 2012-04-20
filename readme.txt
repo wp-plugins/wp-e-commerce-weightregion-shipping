@@ -5,7 +5,7 @@ Requires at least: 3.0
 Tested up to: 3.3.1
 Stable tag: 4.4.1
 
-Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types
+Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types.
 
 == Description ==
 
