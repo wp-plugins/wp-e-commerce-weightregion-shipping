@@ -87,7 +87,18 @@ class ses_weightcountryregion_shipping {
 			return FALSE;
 		}
 	}
+
+
+
 	function show_layers_form() {
+
+		if ( version_compare ( WPSC_VERSION, '3.8.8', '>=' ) ) {
+			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
+            $toplevel_element = "td#wpsc-shipping-module-settings";
+        } else {
+        	$settings_element = "td.gateway_settings div.inside div.submit";
+            $toplevel_element = "td.gateway_settings";
+        }
 
 		$shipping = get_option($this->getInternalName().'_options');
 		
@@ -122,8 +133,8 @@ class ses_weightcountryregion_shipping {
 		echo '<br/>';
 		echo '<a id="ses-weightcountryregion-newlayer">New Layer</a>';
 		echo '<script type="text/javascript">
-                        jQuery("td.gateway_settings div.inside div.submit").expire();
-			jQuery("td.gateway_settings div.inside div.submit").livequery(function() { jQuery(this).show();});
+                        jQuery("'.$settings_element.'").expire();
+			jQuery("'.$settings_element.'").livequery(function() { jQuery(this).show();});
 		      </script>';
 
 		exit();
@@ -131,6 +142,14 @@ class ses_weightcountryregion_shipping {
 	}
 
 	function getForm() {
+
+		if ( version_compare ( WPSC_VERSION, '3.8.8', '>=' ) ) {
+			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
+            $toplevel_element = "td#wpsc-shipping-module-settings";
+        } else {
+        	$settings_element = "td.gateway_settings div.inside div.submit";
+            $toplevel_element = "td.gateway_settings";
+        }
 
 		if (isset($_POST['countryregion']) && $_POST['countryregion'] != "") {
 			$output = show_layers_form($_POST['countryregion']);
@@ -152,11 +171,11 @@ class ses_weightcountryregion_shipping {
 			$output .= '
 		        </select>
 		        <script type="text/javascript">
-                           jQuery("td.gateway_settings div.inside div.submit").expire();
-			   jQuery("td.gateway_settings div.inside div.submit").livequery(function() { jQuery(this).hide("slow");});
+                           jQuery("'.$settings_element.'").expire();
+			   jQuery("'.$settings_element.'").livequery(function() { jQuery(this).hide("slow");});
                            jQuery("#ses-weightcountryregion-select").change(function() {
 		             jQuery.ajax( { url: "admin-ajax.php?action=ses-weightcountryregion-layers&countryregion="+jQuery(this).val(),
-                                        success: function(data) { jQuery("td.gateway_settings table.form-table").html(data); }
+                                        success: function(data) { jQuery("'.$toplevel_element.' table.form-table").html(data); }
                                           }
                                         ) });
                            jQuery("#ses-weightcountryregion-newlayer").expire();
