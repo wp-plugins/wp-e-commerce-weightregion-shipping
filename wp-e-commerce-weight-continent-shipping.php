@@ -1,6 +1,13 @@
 <?php
+/**
+ * wp-e-commerce-weight-continent-shipping.php
+ *
+ * @package wp-e-commerce-weightregion-shipping
+ */
+
 
 /* This is confusingly named - it's actually Weight / Continent shipping */
+
 class ses_weightregion_shipping {
 
 	var $internal_name;
@@ -9,24 +16,28 @@ class ses_weightregion_shipping {
 
 	var $region_list;
 
+
+	/**
+	 *
+	 */
 	function ses_weightregion_getregions() {
-	
+
 		global $wpdb, $table_prefix;
 
-		$standard_continents = Array('local' => 'Local',
-		                             'northamerica' => 'North America',
-       		                             'southamerica' => 'South America',
-		                             'asiapacific' => 'Asia and Pacific',
-		                             'europe' => 'Europe',
-		                             'antarctica' => 'Antarctica',
-		                             'africa' => 'Africa');
+		$standard_continents = array('local' => 'Local',
+			'northamerica' => 'North America',
+			'southamerica' => 'South America',
+			'asiapacific' => 'Asia and Pacific',
+			'europe' => 'Europe',
+			'antarctica' => 'Antarctica',
+			'africa' => 'Africa');
 
 		$sql = "SELECT DISTINCT(continent)
 		          FROM {$table_prefix}wpsc_currency_list";
 
 		$continents = $wpdb->get_results($sql, ARRAY_A);
 
-		$results = Array();
+		$results = array();
 
 		if (count($continents)) {
 
@@ -46,10 +57,16 @@ class ses_weightregion_shipping {
 		}
 
 		$this->region_list = $results;
-	
+
 	}
 
-	function ses_weightregion_shipping () {
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
+	function ses_weightregion_shipping() {
 
 		$this->internal_name = "ses_weightregion_shipping";
 		$this->name = "Weight / Continent Shipping";
@@ -57,19 +74,40 @@ class ses_weightregion_shipping {
 		$this->ses_weightregion_getregions();
 		return true;
 	}
-	
-	/* You must always supply this */
+
+
+
+	/**
+	 * You must always supply this
+	 *
+	 * @return unknown
+	 */
 	function getName() {
 		return $this->name;
 	}
-	
-	/* You must always supply this */
+
+
+
+	/**
+	 * You must always supply this
+	 *
+	 * @return unknown
+	 */
 	function getInternalName() {
 		return $this->internal_name;
 	}
-	
+
+
+
+
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
 	function hide_donate_link() {
-		
+
 		$blogurl = get_bloginfo('url');
 
 		$options = get_option($this->getInternalName().'_options');
@@ -85,7 +123,7 @@ class ses_weightregion_shipping {
 		$validation_url .= "&site=".urlencode($blogurl);
 
 		$response = wp_remote_get($validation_url);
-		if(is_wp_error($response)) {
+		if (is_wp_error($response)) {
 			$options['validation_fail_check'] = time() + 86400;
 			update_option($this->getInternalName().'_options', $options);
 			return FALSE;
@@ -103,18 +141,25 @@ class ses_weightregion_shipping {
 		}
 	}
 
+
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
 	function show_layers_form() {
 
-		if ( version_compare ( WPSC_VERSION, '3.8.8', '>=' ) ) {
+		if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
 			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-            $toplevel_element = "td#wpsc-shipping-module-settings";
-        } else {
-        	$settings_element = "td.gateway_settings div.inside div.submit";
-            $toplevel_element = "td.gateway_settings";
-        }
+			$toplevel_element = "td#wpsc-shipping-module-settings";
+		} else {
+			$settings_element = "td.gateway_settings div.inside div.submit";
+			$toplevel_element = "td.gateway_settings";
+		}
 
 		$shipping = get_option($this->getInternalName().'_options');
-		
+
 		if (!isset($_GET['region']) || $_GET['region'] == "") {
 			return $this->getForm();
 		} else {
@@ -123,12 +168,12 @@ class ses_weightregion_shipping {
 
 		echo "Configure weight rates for ";
 		switch ($region) {
-			case 'local':
-				echo "local shipping.";
-				break;
-			default:
-				echo "shipping to ".$this->region_list[$region].".";
-				break;
+		case 'local':
+			echo "local shipping.";
+			break;
+		default:
+			echo "shipping to ".$this->region_list[$region].".";
+			break;
 		}
 		echo "<br/><br/>";
 
@@ -154,18 +199,24 @@ class ses_weightregion_shipping {
 		      </script>';
 
 		exit();
-		
+
 	}
 
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
 	function getForm() {
 
-		if ( version_compare ( WPSC_VERSION, '3.8.8', '>=' ) ) {
+		if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
 			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-            $toplevel_element = "td#wpsc-shipping-module-settings";
-        } else {
-        	$settings_element = "td.gateway_settings div.inside div.submit";
-            $toplevel_element = "td.gateway_settings";
-        }
+			$toplevel_element = "td#wpsc-shipping-module-settings";
+		} else {
+			$settings_element = "td.gateway_settings div.inside div.submit";
+			$toplevel_element = "td.gateway_settings";
+		}
 
 		if (isset($_POST['region']) && $_POST['region'] != "") {
 			$output = $this->show_layers_form($_POST['region']);
@@ -216,17 +267,20 @@ class ses_weightregion_shipping {
 		}
 		return $output;
 	}
-	
 
 
-	/* Use this function to store the settings submitted by the form above
-	 * Submitted form data is in $_POST */
 
+	/**
+	 * Use this function to store the settings submitted by the form above
+	 * Submitted form data is in $_POST 
+	 *
+	 * @return unknown
+	 */
 	function submit_form() {
 
 		if (!isset($_POST[$this->getInternalName().'_region']) ||
-		    $_POST[$this->getInternalName().'_region'] == "") {
-			return FALSE; 
+			$_POST[$this->getInternalName().'_region'] == "") {
+			return FALSE;
 		}
 
 		// Get current settings array
@@ -239,7 +293,7 @@ class ses_weightregion_shipping {
 		$weights = $_POST[$this->getInternalName().'_weights'];
 		$rates = $_POST[$this->getInternalName().'_rates'];
 
-		$new_shipping = Array();
+		$new_shipping = array();
 
 		// Build submitted data into correct format
 		for ($i = 0; $i < count($weights); $i++) {
@@ -252,34 +306,49 @@ class ses_weightregion_shipping {
 		}
 
 		if (count($new_shipping)) {
-			krsort($new_shipping,SORT_NUMERIC);
+			krsort($new_shipping, SORT_NUMERIC);
 		}
 
 		$shipping[$region] = $new_shipping;
-		update_option($this->getInternalName().'_options',$shipping);
+		update_option($this->getInternalName().'_options', $shipping);
 
 		return true;
 
 	}
-	
+
+
+
+
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
 	function save_quote_method() {
 
 		// Called via Ajax if the quote method is changed
 		if (!isset($_POST['quote_method'])) {
-			return FALSE; 
+			return FALSE;
 		}
 
 		$options = get_option($this->getInternalName().'_options');
-        if (!$options) {
-            unset($option);
-        }
+		if (!$options) {
+			unset($option);
+		}
 
 		$options['quote_method'] = $_POST['quote_method'];
 
-		update_option($this->getInternalName().'_options',$options);
+		update_option($this->getInternalName().'_options', $options);
 
 	}
 
+
+	/**
+	 *
+	 *
+	 * @return unknown
+	 */
 	function validate_posted_country_info() {
 
 		global $wpdb, $table_prefix;
@@ -311,34 +380,40 @@ class ses_weightregion_shipping {
 		return $country_id;
 	}
 
-	/* If there is a per-item shipping charge that applies irrespective of the chosen shipping method
-         * then it should be calculated and returned here. The value returned from this function is used
-         * as-is on the product pages. It is also included in the final cart & checkout figure along
-         * with the results from GetQuote (below) */
 
+
+	/**
+	 * If there is a per-item shipping charge that applies irrespective of the chosen shipping method
+     * then it should be calculated and returned here. The value returned from this function is used
+     * as-is on the product pages. It is also included in the final cart & checkout figure along
+     * with the results from GetQuote (below)
+	 *
+	 * @param unknown $cart_item (reference)
+	 * @return unknown
+	 */
 	function get_item_shipping(&$cart_item) {
 
 		global $wpdb;
 
 		$product_id = $cart_item->product_id;
-        $quantity = $cart_item->quantity;
-        $weight = $cart_item->weight;
-        $unit_price = $cart_item->unit_price;
+		$quantity = $cart_item->quantity;
+		$weight = $cart_item->weight;
+		$unit_price = $cart_item->unit_price;
 
 		// If we're calculating a price based on a product, and that the store has shipping enabled
 
-    	if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
 
 			$country_id = $this->validate_posted_country_info();
 			$country_code = $_SESSION['wpsc_delivery_country'];
 
-			if ( ! defined ( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
+			if ( ! defined( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
 
 				// Get product information
-	    		$product_list = $wpdb->get_row("SELECT *
+				$product_list = $wpdb->get_row("SELECT *
 				                                  FROM `".WPSC_TABLE_PRODUCT_LIST."`
 					                         WHERE `id`='{$product_id}'
-				                                 LIMIT 1",ARRAY_A);
+				                                 LIMIT 1", ARRAY_A);
 
 				$no_shipping = $product_list['no_shipping'];
 				$local_shipping = isset ( $product_list['pnp'] ) ? $product_list['pnp'] : 0;
@@ -354,47 +429,50 @@ class ses_weightregion_shipping {
 
 			}
 
-	    	// If the item has shipping enabled
-		   	if($no_shipping == 0) {
+			// If the item has shipping enabled
+			if ($no_shipping == 0) {
 
-	    		if($country_code == get_option('base_country')) {
+				if ($country_code == get_option('base_country')) {
 
 					// Pick up the price from "Local Shipping Fee" on the product form
-	    			$additional_shipping = $local_shipping;
+					$additional_shipping = $local_shipping;
 
 				} else {
 
 					// Pick up the price from "International Shipping Fee" on the product form
-    				$additional_shipping = $international_shipping;
+					$additional_shipping = $international_shipping;
 
-				}          
+				}
 
 				// Item shipping charges are per unit quantity
-    			$shipping = $quantity * $additional_shipping;
+				$shipping = $quantity * $additional_shipping;
 
 			} else {
 
-    			//if the item does not have shipping
-    			$shipping = 0;
-	
+				//if the item does not have shipping
+				$shipping = 0;
+
 			}
 
 		} else {
 
-      		//if the item is invalid or store is set not to use shipping
+			//if the item is invalid or store is set not to use shipping
 			$shipping = 0;
 
 		}
 
-    	return $shipping;	
+		return $shipping;
 	}
-	
 
 
-	/* This function returns an Array of possible shipping choices, and associated costs.
-         * This is for the cart in general, per item charges (As returned from get_item_shipping (above))
-         * will be added on as well. */
 
+	/**
+	 * This function returns an Array of possible shipping choices, and associated costs.
+     * This is for the cart in general, per item charges (As returned from get_item_shipping (above))
+     * will be added on as well.
+	 *
+	 * @return unknown
+	 */
 	function getQuote() {
 
 		global $wpdb, $wpsc_cart;
@@ -410,14 +488,14 @@ class ses_weightregion_shipping {
 									WHERE `isocode` IN('{$country}')
 									LIMIT 1");
 		$region = $results;
-		
+
 		if (isset($options[$region]) && count($options[$region])) {
-			$layers = $options[$region]; 
+			$layers = $options[$region];
 		} else {
 			// No shipping layers configured for this region
-			return Array();
+			return array();
 		}
-		
+
 		// Previous releases had a bug where "empty" config settings could be saved
 		// We strip them out here
 		foreach ($layers as $key => $value) {
@@ -426,11 +504,11 @@ class ses_weightregion_shipping {
 			}
 		}
 		if (!count($layers)) {
-			return Array();
+			return array();
 		}
-			
+
 		if (!isset($options['quote_method']) ||
-				$options['quote_method'] == 'total') {
+			$options['quote_method'] == 'total') {
 
 			// Get the cart weight
 			$weight = wpsc_cart_weight_total();
@@ -442,7 +520,7 @@ class ses_weightregion_shipping {
 					return array("Shipping"=>(float)$shipping);
 				}
 			}
-	
+
 		} else {
 
 			if (isset($wpsc_cart) && isset($wpsc_cart->cart_items) && count($wpsc_cart->cart_items)) {
@@ -474,12 +552,10 @@ class ses_weightregion_shipping {
 
 		}
 		// We couldn't find a rate - exit out.
-		return Array();
+		return array();
 
-		
+
 	}
-	
-	
-} 
 
-?>
+
+}

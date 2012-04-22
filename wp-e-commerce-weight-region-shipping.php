@@ -15,10 +15,25 @@
 
 
 
+/**
+ * wp-e-commerce-weight-region-shipping.php
+ *
+ * @package wp-e-commerce-weightregion-shipping
+ */
+
+
+
 /* This first module is confusingly named. It's actually weight / continent shipping */
 
-require_once("wp-e-commerce-weight-continent-shipping.php");
+require_once "wp-e-commerce-weight-continent-shipping.php";
 
+
+/**
+ *
+ *
+ * @param unknown $wpsc_shipping_modules
+ * @return unknown
+ */
 function ses_weightregion_shipping_add($wpsc_shipping_modules) {
 
 	global $ses_weightregion_shipping;
@@ -28,14 +43,21 @@ function ses_weightregion_shipping_add($wpsc_shipping_modules) {
 
 	return $wpsc_shipping_modules;
 }
-	
+
 
 
 
 /* Weight / Country & Region Shipping */
 
-require_once("wp-e-commerce-weight-countryregion-shipping.php");
+require_once "wp-e-commerce-weight-countryregion-shipping.php";
 
+
+/**
+ *
+ *
+ * @param unknown $wpsc_shipping_modules
+ * @return unknown
+ */
 function ses_weightcountryregion_shipping_add($wpsc_shipping_modules) {
 
 	global $ses_weightcountryregion_shipping;
@@ -51,13 +73,13 @@ function ses_weightcountryregion_shipping_add($wpsc_shipping_modules) {
 
 add_filter('wpsc_shipping_modules', 'ses_weightcountryregion_shipping_add');
 add_filter('wpsc_shipping_modules', 'ses_weightregion_shipping_add');
-add_action('wp_ajax_ses-weightregion-layers',array(&$ses_weightregion_shipping,"show_layers_form"));
-add_action('wp_ajax_ses-weightcountryregion-layers',array(&$ses_weightcountryregion_shipping,"show_layers_form"));
-add_action('wp_ajax_ses-weightregion-quote-method',array(&$ses_weightregion_shipping,"save_quote_method"));
-add_action('wp_ajax_ses-weightcountryregion-quote-method',array(&$ses_weightcountryregion_shipping,"save_quote_method"));
+add_action('wp_ajax_ses-weightregion-layers', array(&$ses_weightregion_shipping, "show_layers_form"));
+add_action('wp_ajax_ses-weightcountryregion-layers', array(&$ses_weightcountryregion_shipping, "show_layers_form"));
+add_action('wp_ajax_ses-weightregion-quote-method', array(&$ses_weightregion_shipping, "save_quote_method"));
+add_action('wp_ajax_ses-weightcountryregion-quote-method', array(&$ses_weightcountryregion_shipping, "save_quote_method"));
 
 if (is_admin()) {
-	require_once ('wp-e-commerce-weight-region-region-manager.php');
+	require_once 'wp-e-commerce-weight-region-region-manager.php';
 }
 
 ?>
