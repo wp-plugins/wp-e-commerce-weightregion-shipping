@@ -3,7 +3,7 @@
  Plugin Name: WP E-Commerce Weight & Destination Shipping Modules
  Plugin URI: http://www.leewillis.co.uk/wordpress-plugins/
  Description: Shipping Modules For WP E-Commerce bases prices on region (Continent, or country / region) and weight bands
- Version: 4.4.1
+ Version: 4.5
  Author: Lee Willis
  Author URI: http://www.leewillis.co.uk/
 */

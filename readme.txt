@@ -2,8 +2,8 @@
 Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 4.4.1
+Tested up to: 3.3.2
+Stable tag: 4.5
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types.
 
@@ -64,6 +64,9 @@ Assumes that each item will be shipped in bundles. For each item in the cart, th
 
 == Changelog ==
 
+= 4.5 =
+Compatibility with WP e-Commerce 3.8.8. Updates kindly sponsored by Jamie at New Vision Media (http://www.newvisionmedia.co.uk)
+
 = 4.4.1 =
 Minor bugfixes
 
@@ -81,19 +84,3 @@ Fixed a bug where empty layers could be saved, and lead to incorrect shipping qu
 
 = 4.0 =
 Calculate based on either the total cart weight, or individual product weights
-
-= 3.0 =
-Online tool to allow you to edit regions through the WordPress admin area. Courtest of Instinct and Sam @ Hotchkiss Consulting (http://hotchkissconsulting.net/)
-
-= 2.0 =
-Offer two modules - one based on country (Optionally including a region), and one based on continents. You can use both of these at once if required to give specific pricing for a certain country and regions, plus blanket pricing for the other continents
-
-= 1.2 =
-Compatibility with WP e-Commerce 3.7.6
-Don't hardcode regions - pull them from {prefix}wpsc_currency_list
-
-= 1.1 =
-UI Bugfixes in the admin area
-
-= 1.0 =
-* Initial Release
