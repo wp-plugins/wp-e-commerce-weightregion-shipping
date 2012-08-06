@@ -22,8 +22,6 @@ function region_shipping_menu() {
 		}
 	}
 
-	return $menu;
-
 }
 
 
