@@ -3,7 +3,7 @@ Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 3.0
 Tested up to: 3.3.2
-Stable tag: 4.5
+Stable tag: 4.5.1
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types.
 
@@ -63,6 +63,9 @@ Assumes that each item will be shipped in bundles. For each item in the cart, th
 2. Setting weight bands per region
 
 == Changelog ==
+
+= 4.5.1 =
+Remove erroneous return statement avoiding a PHP warning
 
 = 4.5 =
 Compatibility with WP e-Commerce 3.8.8. Updates kindly sponsored by Jamie at New Vision Media (http://www.newvisionmedia.co.uk)
