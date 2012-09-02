@@ -2,7 +2,7 @@
 Contributors: leewillis77
 Tags: e-commerce, shipping
 Requires at least: 3.0
-Tested up to: 3.3.2
+Tested up to: 3.4.1
 Stable tag: 4.5.1
 
 Shipping module for the WP E-Commerce system that offers weight based shipping to various destination types.
@@ -22,7 +22,7 @@ This plugin also provides an online tool to allow you to split countries into wh
 
 == Installation ==
 
-*You Must* already have the following plugin installed: 
+*You Must* already have the following plugin installed:
 
 1. [WP e-Commerce](http://wordpress.org/extend/plugins/wp-e-commerce/)
 
@@ -45,10 +45,10 @@ Support for the right hooks is only available in 3.7.6 beta 3 or newer of WP E-C
 If you're using Gold Cart from getshopped.org, check you have the newest release. Earlier releases had a bug which broke external shipping plugins.
 
 * The weight rates aren't getting calculated / don't change when I add more products?
-Make sure you have a weight rate for "0 and above". Also ensure that you've entered shipping weights in pounds (lbs), regardless of what units you've set your products up in. 
+Make sure you have a weight rate for "0 and above". Also ensure that you've entered shipping weights in pounds (lbs), regardless of what units you've set your products up in.
 
 * What is the difference between the various charging methods?
-The plugin offers three different ways of mapping a customers order onto your weight bands. 
+The plugin offers three different ways of mapping a customers order onto your weight bands.
 
 1. Single quote for total cart weight
 The weight of the entire cart is calculated, and this weight is used to check against the configured weight bands for the customer's selected destination
@@ -76,10 +76,10 @@ Minor bugfixes
 = 4.4 =
 Let blank rates be removed
 
-= 4.3 = 
+= 4.3 =
 Fixed missing Region Manager menu with WP e-Commerce 3.8
 
-= 4.2 = 
+= 4.2 =
 Compatibility with WP e-Commerce 3.8
 
 = 4.1 =
