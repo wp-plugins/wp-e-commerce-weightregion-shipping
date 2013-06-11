@@ -6,7 +6,7 @@
  */
 
 
-class ses_weightcountryregion_shipping {
+class ses_weightcountryregion_shipping extends ses_weightregion_module {
 
 	var $internal_name;
 	var $name;
@@ -79,50 +79,6 @@ class ses_weightcountryregion_shipping {
 	 */
 	function getInternalName() {
 		return $this->internal_name;
-	}
-
-
-
-
-
-	/**
-	 *
-	 *
-	 * @return unknown
-	 */
-	function hide_donate_link() {
-
-		$blogurl = get_bloginfo('url');
-
-		$options = get_option($this->getInternalName().'_options');
-		if (isset($options['validated']) && $options['validated'] > time()) {
-			return TRUE;
-		}
-		if (isset($options['validation_fail_check']) && $options['validation_fail_check'] > time()) {
-			return FALSE;
-		}
-
-		$validation_url = "http://www.leewillis.co.uk/?action=ses_plugin_validate";
-		$validation_url .= "&plugin=ses_weightregion_shipping";
-		$validation_url .= "&site=".urlencode($blogurl);
-
-		$response = wp_remote_get($validation_url);
-		if (is_wp_error($response)) {
-			$options['validation_fail_check'] = time() + 86400;
-			update_option($this->getInternalName().'_options', $options);
-			return FALSE;
-		}
-		$response_code = $response['response']['code'];
-
-		if ($response_code == '200') {
-			$options['validated'] = time() + 2592000;
-			update_option($this->getInternalName().'_options', $options);
-			return TRUE;
-		} else {
-			$options['validation_fail_check'] = time() + 86400;
-			update_option($this->getInternalName().'_options', $options);
-			return FALSE;
-		}
 	}
 
 
@@ -330,43 +286,6 @@ class ses_weightcountryregion_shipping {
 	}
 
 
-	/**
-	 *
-	 *
-	 * @return unknown
-	 */
-	function validate_posted_country_info() {
-
-		global $wpdb, $table_prefix;
-
-		if (isset($_POST['country'])) {
-			$country = $_POST['country'];
-			$_SESSION['wpsc_delivery_country'] = $country;
-		} else {
-			$country = $_SESSION['wpsc_delivery_country'];
-		}
-
-		$sql = "SELECT id FROM {$table_prefix}wpsc_currency_list WHERE isocode=%s";
-		$country_id = $wpdb->get_var($wpdb->prepare($sql, $country));
-
-		if (isset($_POST['region'])) {
-			$region = $_POST['region'];
-			$_SESSION['wpsc_delivery_region'] = $region;
-		} else {
-			$region = $_SESSION['wpsc_delivery_region'];
-		}
-
-		// Check that the region is valid for this country (For when we're changing coutries)
-		$sql = "SELECT id FROM {$table_prefix}wpsc_region_tax WHERE id = %s and country_id = %s";
-		$region_id = $wpdb->get_var($wpdb->prepare($sql, $region, $country_id));
-		if ($region_id != $region) {
-			unset($_SESSION['wpsc_delivery_region']);
-		}
-
-		return $country_id;
-	}
-
-
 
 	/**
 	 * If there is a per-item shipping charge that applies irrespective of the chosen shipping method
@@ -377,7 +296,7 @@ class ses_weightcountryregion_shipping {
 	 * @param unknown $cart_item (reference)
 	 * @return unknown
 	 */
-	function get_item_shipping(&$cart_item) {
+	function get_item_shipping( &$cart_item ) {
 
 		global $wpdb;
 
