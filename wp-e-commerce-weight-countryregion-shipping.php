@@ -124,28 +124,29 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function getForm() {
 
-		if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
-			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-			$toplevel_element = "td#wpsc-shipping-module-settings";
-		} else {
-			$settings_element = "td.gateway_settings div.inside div.submit";
-			$toplevel_element = "td.gateway_settings";
-		}
+		$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
+		$toplevel_element = "td#wpsc-shipping-module-settings";
 
 		if (isset($_POST['countryregion']) && $_POST['countryregion'] != "") {
 			$output = show_layers_form($_POST['countryregion']);
 		} else {
 			$output = '<tr><td>';
 			if (!$this->hide_donate_link()) {
-				$output .= '<div align="center"><div class="donate" style="background: rgb(255,247,124); padding: 5px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 240px;">This plugin is provided free of charge. If you find it useful, you should<strong><br><a href="http://www.leewillis.co.uk/wordpress-plugins/">donate here</a></strong><br/><small><a target="_blank" href="http://www.leewillis.co.uk/hide-donations/">Hide this message</a></div></div><br/>';
+				$output .= '<div style="float: left; margin-right: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
+				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
+				<p>
+				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K8SZHFA67KEMA" target="_blank">$10</a> -
+				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=CFX94YKKVE7TJ" target="_blank">$20</a> -
+				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X9M83NUHGFSPA" target="_blank">$30</a>
+				</p></div></div>';
 			}
-			$output .= "Pick a region to configure the weight layers:<br/><br/>";
+			$output .= 'Pick a region to configure the weight layers:<br/><br/>';
 			$output .= '<select id="ses-weightcountryregion-select" name="countryregion"><option value="">-- Choose --</option>';
-			foreach ($this->countryregion_list as $country) {
-				$composite_key = $country['country_id']."|".$country['region_id'];
+			foreach ( $this->countryregion_list as $country ) {
+				$composite_key = $country['country_id'] . '|' . $country['region_id'];
 				$country_desc = $country['country_name'];
-				if (isset($country['region_id'])) {
-					$country_desc .= ", ".$country['region_name'];
+				if ( isset( $country['region_id'] ) ) {
+					$country_desc .= ", " . $country['region_name'];
 				}
 				$output .= '<option value="'.$composite_key.'">'.$country_desc.'</option>';
 			}
