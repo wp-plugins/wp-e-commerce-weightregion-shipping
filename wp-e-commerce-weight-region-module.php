@@ -11,13 +11,39 @@ abstract class ses_weightregion_module {
 
 
 
-	abstract public function getName();
-	abstract public function getInternalName();
+    protected $internal_name;
+    protected $name;
+    protected $is_external;
+
+
+
 	abstract public function getForm();
 	abstract public function submit_form();
 	abstract public function get_item_shipping( &$cart_item );
 	abstract public function getQuote();
 
+
+
+
+	/**
+	 * Return the name of the shipping module
+	 *
+	 * @return string  The name of the shipping module
+	 */
+	function getName() {
+		return $this->name;
+	}
+
+
+
+	/**
+	 * Return the internal name of the shipping module
+	 *
+	 * @return string  The internal name of the shipping module
+	 */
+	function getInternalName() {
+		return $this->internal_name;
+	}
 
 
 

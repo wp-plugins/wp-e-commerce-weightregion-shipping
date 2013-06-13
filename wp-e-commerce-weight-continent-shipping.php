@@ -10,9 +10,6 @@
 
 class ses_weightregion_shipping extends ses_weightregion_module {
 
-    var $internal_name;
-    var $name;
-    var $is_external;
 
     var $region_list;
 
@@ -73,28 +70,6 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         $this->is_external = FALSE;
         $this->ses_weightregion_getregions();
         return true;
-    }
-
-
-
-    /**
-     * You must always supply this
-     *
-     * @return unknown
-     */
-    function getName() {
-        return $this->name;
-    }
-
-
-
-    /**
-     * You must always supply this
-     *
-     * @return unknown
-     */
-    function getInternalName() {
-        return $this->internal_name;
     }
 
 
@@ -397,7 +372,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         global $wpdb, $wpsc_cart;
 
         $country_id = $this->validate_posted_country_info();
-        $country = $_SESSION['wpsc_delivery_country'];
+        $country = isset( $_SESSION['wpsc_delivery_country'] ) ? $_SESSION['wpsc_delivery_country'] : '';
 
         // Retrieve the options set by submit_form() above
         $options = get_option($this->getInternalName().'_options');
