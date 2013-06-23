@@ -67,13 +67,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function show_layers_form() {
 
-		if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
-			$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-			$toplevel_element = "td#wpsc-shipping-module-settings";
-		} else {
-			$settings_element = "td.gateway_settings div.inside div.submit";
-			$toplevel_element = "td.gateway_settings";
-		}
+		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
 
 		$shipping = get_option($this->getInternalName().'_options');
 
@@ -97,19 +91,18 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		if (isset($shipping[$countryregion]) && count($shipping[$countryregion])) {
 			$weights = array_keys($shipping[$countryregion]);
 			foreach ($weights as $weight) {
-				echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'"> ';
+				echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'">lbs - ';
 				echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8" value="'.htmlentities($shipping[$countryregion][$weight]).'"><br/>';
 			}
 		} else {
-			echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0"> ';
+			echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0">lbs - ';
 			echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8"><br/>';
 		}
 		echo '</div>';
 		echo '<br/>';
 		echo '<a id="ses-weightcountryregion-newlayer">New Layer</a>';
 		echo '<script type="text/javascript">
-                        jQuery("'.$settings_element.'").expire();
-			jQuery("'.$settings_element.'").livequery(function() { jQuery(this).show();});
+			jQuery("'.$settings_element.'").show();
 		      </script>';
 
 		exit();
@@ -124,15 +117,14 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function getForm() {
 
-		$settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-		$toplevel_element = "td#wpsc-shipping-module-settings";
+		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
 
 		if (isset($_POST['countryregion']) && $_POST['countryregion'] != "") {
 			$output = show_layers_form($_POST['countryregion']);
 		} else {
 			$output = '<tr><td>';
 			if (!$this->hide_donate_link()) {
-				$output .= '<div style="float: left; margin-right: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
+				$output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
 				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
 				<p>
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K8SZHFA67KEMA" target="_blank">$10</a> -
@@ -140,6 +132,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X9M83NUHGFSPA" target="_blank">$30</a>
 				</p></div></div>';
 			}
+			$output .= '<div id="ses-weightcountryregion-shipping-container">';
 			$output .= 'Pick a region to configure the weight layers:<br/><br/>';
 			$output .= '<select id="ses-weightcountryregion-select" name="countryregion"><option value="">-- Choose --</option>';
 			foreach ( $this->countryregion_list as $country ) {
@@ -153,16 +146,25 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 			$output .= '
 		        </select>
 		        <script type="text/javascript">
-                           jQuery("'.$settings_element.'").expire();
-			   jQuery("'.$settings_element.'").livequery(function() { jQuery(this).hide("slow");});
-                           jQuery("#ses-weightcountryregion-select").change(function() {
-		             jQuery.ajax( { url: "admin-ajax.php?action=ses-weightcountryregion-layers&countryregion="+jQuery(this).val(),
-                                        success: function(data) { jQuery("'.$toplevel_element.' table.form-table").html(data); }
-                                          }
-                                        ) });
-                           jQuery("#ses-weightcountryregion-newlayer").expire();
-                           jQuery("#ses-weightcountryregion-newlayer").livequery("click", function(event){
-			     jQuery("#ses-weightcountryregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\"> Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
+		        	// Hide the submit button
+                    jQuery(document).ready(function() {
+                    	jQuery("'.$settings_element.'").hide();
+                    });
+
+					// Load the second form when requested
+                    jQuery("#ses-weightcountryregion-select").change(function() {
+		            	jQuery.ajax(
+            	            { url: "admin-ajax.php?action=ses-weightcountryregion-layers&countryregion="+jQuery(this).val(),
+  	                            success: function(data) {
+    	                          	jQuery("#ses-weightcountryregion-shipping-container").html(data);
+        	                    }
+                            }
+                        );
+					});
+
+	                jQuery(document).on("click", "#ses-weightcountryregion-newlayer", function(event){
+			     			jQuery("#ses-weightcountryregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");
+			     		});
 		        </script>';
 			$options = get_option($this->getInternalName().'_options');
 			if (!isset($options['quote_method'])) {
@@ -183,6 +185,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 					}
 				);
 				</script>';
+			$output .= '</div>';
 			$output .= '</td></tr>';
 
 		}
