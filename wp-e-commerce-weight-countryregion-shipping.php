@@ -22,10 +22,10 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		                                     "SELECT cl.id as country_id,
 		                                             cl.country as country_name,
 		                                             rt.id as region_id,
-			                                     rt.name as region_name
+  			                                         rt.name as region_name
 		                                        FROM {$table_prefix}wpsc_currency_list cl
 		                                   LEFT JOIN {$table_prefix}wpsc_region_tax rt
-                                                          ON cl.id = rt.country_id
+                                                  ON cl.id = rt.country_id
 		                                       WHERE cl.visible = '1'
 		                                    ORDER BY cl.country ASC, rt.name ASC", ARRAY_A
 		                                    );
@@ -167,6 +167,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 			     		});
 		        </script>';
 			$options = get_option($this->getInternalName().'_options');
+
 			if (!isset($options['quote_method'])) {
 				$options['quote_method'] = 'total';
 			}
