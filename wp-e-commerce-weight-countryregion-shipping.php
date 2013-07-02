@@ -300,27 +300,11 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				$region_id = '';
 			}
 
-			if ( ! defined( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
+			$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
 
-				// Get product information
-				$product_list = $wpdb->get_row("SELECT *
-				                                  FROM `".WPSC_TABLE_PRODUCT_LIST."`
-						                         WHERE `id`='{$product_id}'
-				                                 LIMIT 1", ARRAY_A);
-
-				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = isset ( $product_list['pnp'] ) ? $product_list['pnp'] : 0;
-				$international_shipping = isset ( $product_list['international_pnp'] ) ? $product_list['international_pnp'] : 0;
-
-			} else {
-
-				$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
-
-				$no_shipping = $product_list['no_shipping'];
-				$local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
-				$international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
-
-			}
+			$no_shipping = $product_list['no_shipping'];
+			$local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
+			$international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
 			// If the item has shipping enabled
 			if ($no_shipping == 0) {

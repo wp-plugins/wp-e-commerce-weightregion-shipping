@@ -81,13 +81,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function show_layers_form() {
 
-        if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
-            $settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-            $toplevel_element = "td#wpsc-shipping-module-settings";
-        } else {
-            $settings_element = "td.gateway_settings div.inside div.submit";
-            $toplevel_element = "td.gateway_settings";
-        }
+		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
 
         $shipping = get_option($this->getInternalName().'_options');
 
@@ -114,11 +108,11 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         if (isset($shipping[$region]) && count($shipping[$region])) {
             $weights = array_keys($shipping[$region]);
             foreach ($weights as $weight) {
-                echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'"> ';
+                echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'">lbs -  ';
                 echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8" value="'.htmlentities($shipping[$region][$weight]).'"><br/>';
             }
         } else {
-            echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0"> ';
+            echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0">lbs -  ';
             echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8"><br/>';
         }
         echo '</div>';
@@ -141,20 +135,15 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function getForm() {
 
-        if ( version_compare( WPSC_VERSION, '3.8.8', '>=' ) ) {
-            $settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-            $toplevel_element = "td#wpsc-shipping-module-settings";
-        } else {
-            $settings_element = "td.gateway_settings div.inside div.submit";
-            $toplevel_element = "td.gateway_settings";
-        }
+        $settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
+        $toplevel_element = "td#wpsc-shipping-module-settings";
 
         if (isset($_POST['region']) && $_POST['region'] != "") {
             $output = $this->show_layers_form($_POST['region']);
         } else {
             $output = '<tr><td>';
             if (!$this->hide_donate_link()) {
-                $output .= '<div style="float: left; margin-right: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
+                $output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
 				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
 				<p>
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K8SZHFA67KEMA" target="_blank">$10</a> -
@@ -162,6 +151,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X9M83NUHGFSPA" target="_blank">$30</a>
 				</p></div></div>';
             }
+            $output .= '<div id="ses-weightcountryregion-shipping-container">';
             $output .= "Pick a region to configure the weight layers:<br/><br/>";
             $output .= '<select id="ses-weightregion-select" name="region"><option value="">-- Choose --</option>';
             foreach ($this->region_list as $region_id => $region_desc) {
@@ -179,7 +169,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
                                         ) });
                            jQuery("#ses-weightregion-newlayer").expire();
                            jQuery("#ses-weightregion-newlayer").livequery("click", function(event){
-                 jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
+                 jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
                 </script>';
             $options = get_option($this->getInternalName().'_options');
             if (!isset($options['quote_method'])) {
@@ -200,6 +190,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
                         }
                         );
                 </script>';
+            $output .= '</div>';
             $output .= '</td></tr>';
         }
         return $output;
@@ -307,27 +298,11 @@ class ses_weightregion_shipping extends ses_weightregion_module {
             $country_id = $this->validate_posted_country_info();
             $country_code = $_SESSION['wpsc_delivery_country'];
 
-            if ( ! defined( 'WPSC_VERSION' ) || WPSC_VERSION < 3.8 ) {
+            $product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
 
-                // Get product information
-                $product_list = $wpdb->get_row("SELECT *
-                                                  FROM `".WPSC_TABLE_PRODUCT_LIST."`
-                                             WHERE `id`='{$product_id}'
-                                                 LIMIT 1", ARRAY_A);
-
-                $no_shipping = $product_list['no_shipping'];
-                $local_shipping = isset ( $product_list['pnp'] ) ? $product_list['pnp'] : 0;
-                $international_shipping = isset ( $product_list['international_pnp'] ) ? $product_list['international_pnp'] : 0;
-
-            } else {
-
-                $product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
-
-                $no_shipping = $product_list['no_shipping'];
-                $local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
-                $international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
-
-            }
+            $no_shipping = $product_list['no_shipping'];
+            $local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
+            $international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
             // If the item has shipping enabled
             if ($no_shipping == 0) {
