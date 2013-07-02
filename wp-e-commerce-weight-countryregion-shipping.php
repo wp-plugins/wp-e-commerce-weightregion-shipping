@@ -124,7 +124,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		} else {
 			$output = '<tr><td>';
 			if (!$this->hide_donate_link()) {
-				$output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
+				$output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 210px; height: 9em;">
 				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
 				<p>
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K8SZHFA67KEMA" target="_blank">$10</a> -
@@ -172,9 +172,9 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				$options['quote_method'] = 'total';
 			}
 			$output .= '<br/>Prices based on:<br/>';
-			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="total" '.($options['quote_method'] == 'total' ? 'checked' : '').'>Single quote for total cart weight<br>';
-			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="items" '.($options['quote_method'] == 'items' ? 'checked' : '').'>Sum of quotes for individual items<br>';
-			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked' : '').'>Sum of quotes for consolidated items<br>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="total" '.($options['quote_method'] == 'total' ? 'checked="checked"' : '').'>Single quote for total cart weight<br>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="items" '.($options['quote_method'] == 'items' ? 'checked="checked"' : '').'>Sum of quotes for individual items<br>';
+			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked="checked"' : '').'>Sum of quotes for consolidated items<br>';
 			$output .= '
 		        <script type="text/javascript">
 				jQuery("input[name=\'quote_method\']").change(function() {
