@@ -21,41 +21,38 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
         global $wpdb, $table_prefix;
 
-        $standard_continents = array('local' => 'Local',
+        $standard_continents = array(
+            'local' => 'Local',
             'northamerica' => 'North America',
             'southamerica' => 'South America',
             'asiapacific' => 'Asia and Pacific',
             'europe' => 'Europe',
             'antarctica' => 'Antarctica',
-            'africa' => 'Africa');
+            'africa' => 'Africa',
+        );
 
         $sql = "SELECT DISTINCT(continent)
                   FROM {$table_prefix}wpsc_currency_list";
 
-        $continents = $wpdb->get_results($sql, ARRAY_A);
+        $continents = $wpdb->get_results( $sql, ARRAY_A );
 
         $results = array();
 
-        if (count($continents)) {
-
-            foreach ($continents as $continent) {
-
-                if ($continent['continent']=='')
+        if ( count( $continents ) ) {
+            foreach ( $continents as $continent ) {
+                if ( $continent['continent'] == '' )
                     continue;
-
-                if (isset($standard_continents[$continent['continent']])) {
+                if ( isset( $standard_continents[$continent['continent']] ) ) {
                     $results[$continent['continent']] = $standard_continents[$continent['continent']];
                 } else {
                     $results[$continent['continent']] = $continent['continent'];
                 }
-
             }
-
         }
-
         $this->region_list = $results;
 
     }
+
 
 
     /**
@@ -65,8 +62,8 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function ses_weightregion_shipping() {
 
-        $this->internal_name = "ses_weightregion_shipping";
-        $this->name = "Weight / Continent Shipping";
+        $this->internal_name = 'ses_weightregion_shipping';
+        $this->name = 'Weight / Continent Shipping';
         $this->is_external = FALSE;
         $this->ses_weightregion_getregions();
         return true;
@@ -81,35 +78,35 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function show_layers_form() {
 
-		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update"';
 
-        $shipping = get_option($this->getInternalName().'_options');
+        $shipping = get_option( $this->getInternalName() . '_options' );
 
-        if (!isset($_GET['region']) || $_GET['region'] == "") {
+        if ( ! isset( $_GET['region']) || $_GET['region'] == '' ) {
             return $this->getForm();
         } else {
             $region = $_GET['region'];
         }
 
-        echo "Configure weight rates for ";
-        switch ($region) {
-        case 'local':
-            echo "local shipping.";
-            break;
-        default:
-            echo "shipping to ".$this->region_list[$region].".";
-            break;
-        }
-        echo "<br/><br/>";
+        echo 'Configure weight rates for ';
+	        switch ( $region ) {
+		        case 'local':
+		            echo 'local shipping.';
+		            break;
+		        default:
+		            echo 'shipping to ' . $this->region_list[$region] . '.';
+		            break;
+	        }
+        echo '<br/><br/>';
 
         echo '<div id="ses-weightregion-layers">';
         echo '<input type="hidden" name="ses_weightregion_shipping_region" value="'.$region.'">';
 
-        if (isset($shipping[$region]) && count($shipping[$region])) {
-            $weights = array_keys($shipping[$region]);
-            foreach ($weights as $weight) {
-                echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'">lbs -  ';
-                echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8" value="'.htmlentities($shipping[$region][$weight]).'"><br/>';
+        if ( isset( $shipping[$region] ) && count( $shipping[$region] ) ) {
+            $weights = array_keys( $shipping[$region] );
+            foreach ( $weights as $weight ) {
+                echo 'Weight over: <input type="text" name="' . $this->getInternalName() . '_weights[]" style="width: 50px;" size="8" value="' . htmlentities( $weight ) . '">lbs -  ';
+                echo 'Shipping: <input type="text" name="' . $this->getInternalName() . '_rates[]" style="width: 50px;" size="8" value="' . htmlentities( $shipping[$region][$weight] ).'"><br/>';
             }
         } else {
             echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0">lbs -  ';
@@ -135,14 +132,14 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function getForm() {
 
-        $settings_element = "td#wpsc-shipping-module-settings div.inside p.submit";
-        $toplevel_element = "td#wpsc-shipping-module-settings";
+        $settings_element = 'td#wpsc-shipping-module-settings div.inside p.submit';
+        $toplevel_element = 'td#wpsc-shipping-module-settings';
 
-        if (isset($_POST['region']) && $_POST['region'] != "") {
-            $output = $this->show_layers_form($_POST['region']);
+        if ( isset( $_POST['region'] ) && $_POST['region'] != '' ) {
+            $output = $this->show_layers_form( $_POST['region'] );
         } else {
             $output = '<tr><td>';
-            if (!$this->hide_donate_link()) {
+            if ( ! $this->hide_donate_link() ) {
                 $output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 190px; height: 9em;">
 				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
 				<p>
@@ -152,9 +149,9 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 				</p></div></div>';
             }
             $output .= '<div id="ses-weightcountryregion-shipping-container">';
-            $output .= "Pick a region to configure the weight layers:<br/><br/>";
+            $output .= 'Pick a region to configure the weight layers:<br/><br/>';
             $output .= '<select id="ses-weightregion-select" name="region"><option value="">-- Choose --</option>';
-            foreach ($this->region_list as $region_id => $region_desc) {
+            foreach ( $this->region_list as $region_id => $region_desc ) {
                 $output .= '<option value="'.$region_id.'">'.$region_desc.'</option>';
             }
             $output .= '
@@ -171,8 +168,8 @@ class ses_weightregion_shipping extends ses_weightregion_module {
                            jQuery("#ses-weightregion-newlayer").livequery("click", function(event){
                  jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
                 </script>';
-            $options = get_option($this->getInternalName().'_options');
-            if (!isset($options['quote_method'])) {
+            $options = get_option( $this->getInternalName() . '_options' );
+            if ( ! isset( $options['quote_method'] ) ) {
                 $options['quote_method'] = 'total';
             }
             $output .= '<br/>Prices based on:<br/>';
@@ -206,15 +203,15 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function submit_form() {
 
-        if (!isset($_POST[$this->getInternalName().'_region']) ||
-            $_POST[$this->getInternalName().'_region'] == "") {
+        if ( ! isset( $_POST[$this->getInternalName() . '_region'] ) ||
+            $_POST[$this->getInternalName() . '_region'] == '' ) {
             return FALSE;
         }
 
         // Get current settings array
-        $shipping = get_option($this->getInternalName().'_options');
-        if (!$shipping) {
-            unset($shipping);
+        $shipping = get_option( $this->getInternalName() . '_options' );
+        if ( ! $shipping ) {
+            unset( $shipping );
         }
 
         $region = $_POST[$this->getInternalName().'_region'];
@@ -224,21 +221,19 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         $new_shipping = array();
 
         // Build submitted data into correct format
-        for ($i = 0; $i < count($weights); $i++) {
-
+        for ( $i = 0; $i < count( $weights ); $i++ ) {
             // Don't set rates if they're blank
-            if (isset($rates[$i]) && $rates[$i] != "") {
+            if ( isset( $rates[$i] ) && $rates[$i] != '' ) {
                 $new_shipping[$weights[$i]] = $rates[$i];
             }
-
         }
 
-        if (count($new_shipping)) {
-            krsort($new_shipping, SORT_NUMERIC);
+        if ( count( $new_shipping ) ) {
+            krsort( $new_shipping, SORT_NUMERIC );
         }
 
         $shipping[$region] = $new_shipping;
-        update_option($this->getInternalName().'_options', $shipping);
+        update_option( $this->getInternalName() . '_options', $shipping );
 
         return true;
 
@@ -256,18 +251,18 @@ class ses_weightregion_shipping extends ses_weightregion_module {
     function save_quote_method() {
 
         // Called via Ajax if the quote method is changed
-        if (!isset($_POST['quote_method'])) {
+        if ( ! isset( $_POST['quote_method'] ) ) {
             return FALSE;
         }
 
-        $options = get_option($this->getInternalName().'_options');
-        if (!$options) {
-            unset($option);
+        $options = get_option( $this->getInternalName() . '_options' );
+        if ( ! $options ) {
+            unset( $option );
         }
 
         $options['quote_method'] = $_POST['quote_method'];
 
-        update_option($this->getInternalName().'_options', $options);
+        update_option( $this->getInternalName() . '_options', $options );
 
     }
 
@@ -293,49 +288,34 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
         // If we're calculating a price based on a product, and that the store has shipping enabled
 
-        if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
-
+        if ( is_numeric( $product_id ) && ( get_option( 'do_not_use_shipping' ) != 1 ) ) {
             $country_id = $this->validate_posted_country_info();
             $country_code = $_SESSION['wpsc_delivery_country'];
-
-            $product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
-
+            $product_list = get_post_meta( $product_id, '_wpsc_product_metadata', TRUE );
             $no_shipping = $product_list['no_shipping'];
             $local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
             $international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
             // If the item has shipping enabled
-            if ($no_shipping == 0) {
-
-                if ($country_code == get_option('base_country')) {
-
+            if ( $no_shipping == 0 ) {
+                if ( $country_code == get_option( 'base_country' ) ) {
                     // Pick up the price from "Local Shipping Fee" on the product form
                     $additional_shipping = $local_shipping;
-
                 } else {
-
                     // Pick up the price from "International Shipping Fee" on the product form
                     $additional_shipping = $international_shipping;
-
                 }
 
                 // Item shipping charges are per unit quantity
                 $shipping = $quantity * $additional_shipping;
-
             } else {
-
                 //if the item does not have shipping
                 $shipping = 0;
-
             }
-
         } else {
-
             //if the item is invalid or store is set not to use shipping
             $shipping = 0;
-
         }
-
         return $shipping;
     }
 
@@ -356,15 +336,17 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         $country = isset( $_SESSION['wpsc_delivery_country'] ) ? $_SESSION['wpsc_delivery_country'] : '';
 
         // Retrieve the options set by submit_form() above
-        $options = get_option($this->getInternalName().'_options');
+        $options = get_option( $this->getInternalName() . '_options' );
 
-        $results = $wpdb->get_var("SELECT `continent`
-                                     FROM `".WPSC_TABLE_CURRENCY_LIST."`
-                                    WHERE `isocode` IN('{$country}')
-                                    LIMIT 1");
+        $results = $wpdb->get_var(
+            'SELECT `continent`
+               FROM `'.WPSC_TABLE_CURRENCY_LIST.'`
+              WHERE `isocode` IN("' . $country . '")
+              LIMIT 1'
+        );
         $region = $results;
 
-        if (isset($options[$region]) && count($options[$region])) {
+        if ( isset( $options[$region] ) && count( $options[$region] ) ) {
             $layers = $options[$region];
         } else {
             // No shipping layers configured for this region
@@ -373,64 +355,50 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
         // Previous releases had a bug where "empty" config settings could be saved
         // We strip them out here
-        foreach ($layers as $key => $value) {
-            if ($value == '') {
-                unset ($layers[$key]);
+        foreach ( $layers as $key => $value ) {
+            if ( $value == '' ) {
+                unset( $layers[$key] );
             }
         }
-        if (!count($layers)) {
+        if ( ! count( $layers ) ) {
             return array();
         }
 
-        if (!isset($options['quote_method']) ||
-            $options['quote_method'] == 'total') {
-
+        if ( ! isset( $options['quote_method'] ) ||
+            $options['quote_method'] == 'total' ) {
             // Get the cart weight
             $weight = wpsc_cart_weight_total();
-
             // Note the weight layers are sorted before being saved into the options
             // Here we assume that they're in (descending) order
-            foreach ($layers as $key => $shipping) {
-                if ($weight >= (float)$key) {
-                    return array("Shipping"=>(float)$shipping);
+            foreach ( $layers as $key => $shipping ) {
+                if ( $weight >= (float)$key ) {
+                    return array( 'Shipping' => (float)$shipping );
                 }
             }
-
         } else {
-
-            if (isset($wpsc_cart) && isset($wpsc_cart->cart_items) && count($wpsc_cart->cart_items)) {
-
+            if ( isset( $wpsc_cart ) && isset( $wpsc_cart->cart_items ) && count( $wpsc_cart->cart_items ) ) {
                 $subtotal = 0;
-                foreach ($wpsc_cart->cart_items as $cart_item) {
-
-                    foreach ($layers as $key => $shipping) {
-
-                        if ($options['quote_method'] == 'items') {
-                            if ($cart_item->weight >= (float)$key) {
-                                $subtotal += (float)($shipping * $cart_item->quantity);
+                foreach ( $wpsc_cart->cart_items as $cart_item ) {
+                    foreach ( $layers as $key => $shipping ) {
+                        if ( $options['quote_method'] == 'items' ) {
+                            if ( $cart_item->weight >= (float)$key ) {
+                                $subtotal += (float)( $shipping * $cart_item->quantity );
                                 break;
                             }
-                        } elseif ($options['quote_method'] == 'consolidateditems') {
-                            if (($cart_item->weight * $cart_item->quantity) >= (float)$key) {
+                        } elseif ( $options['quote_method'] == 'consolidateditems' ) {
+                            if ( ( $cart_item->weight * $cart_item->quantity ) >= (float)$key ) {
                                 $subtotal += (float)$shipping;
                                 break;
                             }
-
                         }
-
                     }
-
                 }
-                return array("Shipping"=>(float)$subtotal);
-
+                return array( 'Shipping' => (float)$subtotal );
             }
-
         }
         // We couldn't find a rate - exit out.
         return array();
 
-
     }
-
 
 }
