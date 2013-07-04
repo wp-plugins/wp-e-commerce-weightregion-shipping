@@ -78,7 +78,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function show_layers_form() {
 
-		$settings_element = 'div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update"';
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update"';
 
         $shipping = get_option( $this->getInternalName() . '_options' );
 
@@ -115,11 +115,10 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         echo '</div>';
         echo '<br/>';
         echo '<a id="ses-weightregion-newlayer">New Layer</a>';
+        // Reveal the submit button
         echo '<script type="text/javascript">
-                        jQuery("'.$settings_element.'").expire();
-            jQuery("'.$settings_element.'").livequery(function() { jQuery(this).show();});
+                jQuery("'.$settings_element.'").show();
               </script>';
-
         exit();
 
     }
@@ -132,8 +131,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function getForm() {
 
-        $settings_element = 'td#wpsc-shipping-module-settings div.inside p.submit';
-        $toplevel_element = 'td#wpsc-shipping-module-settings';
+		$settings_element = "div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update";
 
         if ( isset( $_POST['region'] ) && $_POST['region'] != '' ) {
             $output = $this->show_layers_form( $_POST['region'] );
@@ -148,7 +146,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 				<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X9M83NUHGFSPA" target="_blank">$30</a>
 				</p></div></div>';
             }
-            $output .= '<div id="ses-weightcountryregion-shipping-container">';
+            $output .= '<div id="ses-weightregion-shipping-container">';
             $output .= 'Pick a region to configure the weight layers:<br/><br/>';
             $output .= '<select id="ses-weightregion-select" name="region"><option value="">-- Choose --</option>';
             foreach ( $this->region_list as $region_id => $region_desc ) {
@@ -157,17 +155,24 @@ class ses_weightregion_shipping extends ses_weightregion_module {
             $output .= '
                 </select>
                 <script type="text/javascript">
-                           jQuery("'.$settings_element.'").expire();
-               jQuery("'.$settings_element.'").livequery(function() { jQuery(this).hide("slow");});
-                           jQuery("#ses-weightregion-select").change(function() {
-                     jQuery.ajax( { url: "admin-ajax.php?action=ses-weightregion-layers&region="+jQuery(this).val(),
-                                        success: function(data) { jQuery("'.$toplevel_element.' table.form-table").html(data); }
-                                          }
-                                        ) });
-                           jQuery("#ses-weightregion-newlayer").expire();
-                           jQuery("#ses-weightregion-newlayer").livequery("click", function(event){
-                 jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");});
+		        	// Hide the submit button
+                    jQuery(document).ready(function() {
+                    	jQuery("'.$settings_element.'").hide();
+                    });
+					// Load the second form when requested
+                    jQuery("#ses-weightregion-select").change(function() {
+                    	jQuery.ajax({
+                    		url: "admin-ajax.php?action=ses-weightregion-layers&region="+jQuery(this).val(),
+                            success: function( data ) {
+                            	jQuery("#ses-weightregion-shipping-container").html(data);
+                            }
+                        });
+					});
+                    jQuery(document).on("click", "#ses-weightregion-newlayer", function(event) {
+                 		jQuery("#ses-weightregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");
+                 	});
                 </script>';
+
             $options = get_option( $this->getInternalName() . '_options' );
             if ( ! isset( $options['quote_method'] ) ) {
                 $options['quote_method'] = 'total';

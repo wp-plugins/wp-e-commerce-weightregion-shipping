@@ -150,25 +150,22 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
                     jQuery(document).ready(function() {
                     	jQuery("'.$settings_element.'").hide();
                     });
-
 					// Load the second form when requested
                     jQuery("#ses-weightcountryregion-select").change(function() {
-		            	jQuery.ajax(
-            	            { url: "admin-ajax.php?action=ses-weightcountryregion-layers&countryregion="+jQuery(this).val(),
-  	                            success: function(data) {
-    	                          	jQuery("#ses-weightcountryregion-shipping-container").html(data);
-        	                    }
-                            }
-                        );
+		            	jQuery.ajax( {
+		            		url: "admin-ajax.php?action=ses-weightcountryregion-layers&countryregion="+jQuery(this).val(),
+                            success: function(data) {
+    	                       	jQuery("#ses-weightcountryregion-shipping-container").html(data);
+        	                }
+                        });
 					});
-
-	                jQuery(document).on("click", "#ses-weightcountryregion-newlayer", function(event){
-			     			jQuery("#ses-weightcountryregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");
-			     		});
+	                jQuery(document).on("click", "#ses-weightcountryregion-newlayer", function(event) {
+		     			jQuery("#ses-weightcountryregion-layers").append("Weight over: <input type=\"text\" name=\"'.$this->getInternalName().'_weights[]\" style=\"width: 50px;\" size=\"8\">lbs - Shipping: <input type=\"text\" name=\"'.$this->getInternalName().'_rates[]\" style=\"width: 50px;\" size=\"8\"><br/>");
+			     	});
 		        </script>';
-			$options = get_option($this->getInternalName().'_options');
+			$options = get_option( $this->getInternalName() . '_options' );
 
-			if (!isset($options['quote_method'])) {
+			if ( ! isset( $options['quote_method'] ) ) {
 				$options['quote_method'] = 'total';
 			}
 			$output .= '<br/>Prices based on:<br/>';
