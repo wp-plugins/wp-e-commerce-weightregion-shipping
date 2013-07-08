@@ -67,32 +67,32 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function show_layers_form() {
 
-		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update';
 
-		$shipping = get_option($this->getInternalName().'_options');
+		$shipping = get_option( $this->getInternalName().'_options' );
 
-		if (!isset($_GET['countryregion']) || $_GET['countryregion'] == "") {
+		if ( ! isset( $_GET['countryregion'] ) || $_GET['countryregion'] == "" ) {
 			return $this->getForm();
 		} else {
 			$countryregion = $_GET['countryregion'];
 		}
 
-		echo "Configure weight rates for shipping to ";
-		echo htmlentities($this->countryregion_list[$countryregion]['country_name']);
-		if (isset($this->countryregion_list[$countryregion]['region_id'])) {
-			echo ", ".htmlentities($this->countryregion_list[$countryregion]['region_name']);
+		echo 'Configure weight rates for shipping to ';
+		echo htmlentities( $this->countryregion_list[$countryregion]['country_name'] );
+		if ( isset( $this->countryregion_list[$countryregion]['region_id'] ) ) {
+			echo ', '.htmlentities( $this->countryregion_list[$countryregion]['region_name'] );
 		}
-		echo ".";
-		echo "<br/><br/>";
+		echo '.';
+		echo '<br/><br/>';
 
 		echo '<div id="ses-weightcountryregion-layers">';
 		echo '<input type="hidden" name="ses_weightcountryregion_shipping_region" value="'.$countryregion.'">';
 
-		if (isset($shipping[$countryregion]) && count($shipping[$countryregion])) {
-			$weights = array_keys($shipping[$countryregion]);
-			foreach ($weights as $weight) {
-				echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="'.htmlentities($weight).'">lbs - ';
-				echo 'Shipping: <input type="text" name="'.$this->getInternalName().'_rates[]" style="width: 50px;" size="8" value="'.htmlentities($shipping[$countryregion][$weight]).'"><br/>';
+		if ( isset( $shipping[$countryregion] ) && count( $shipping[$countryregion] ) ) {
+			$weights = array_keys( $shipping[$countryregion] );
+			foreach ( $weights as $weight ) {
+				echo 'Weight over: <input type="text" name="' . $this->getInternalName() . '_weights[]" style="width: 50px;" size="8" value="'.htmlentities( $weight ).'">lbs - ';
+				echo 'Shipping: <input type="text" name="' . $this->getInternalName() . '_rates[]" style="width: 50px;" size="8" value="'.htmlentities( $shipping[$countryregion][$weight] ).'"><br/>';
 			}
 		} else {
 			echo 'Weight over: <input type="text" name="'.$this->getInternalName().'_weights[]" style="width: 50px;" size="8" value="0">lbs - ';
@@ -116,13 +116,13 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function getForm() {
 
-		$settings_element = "div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update";
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightcountryregion_shipping_form input.edit-shipping-module-update';
 
-		if (isset($_POST['countryregion']) && $_POST['countryregion'] != "") {
-			$output = show_layers_form($_POST['countryregion']);
+		if ( isset( $_POST['countryregion'] ) && $_POST['countryregion'] != "" ) {
+			$output = show_layers_form( $_POST['countryregion'] );
 		} else {
 			$output = '<tr><td>';
-			if (!$this->hide_donate_link()) {
+			if ( ! $this->hide_donate_link() ) {
 				$output .= '<div style="float: right; margin-left: 20px;"><div class="donate" style="background: rgb(255,247,124); padding: 10px; margin-right: 5px; margin-bottom: 5px; color: #000; text-align: center; border: 1px solid #333; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; width: 210px; height: 9em;">
 				<p>If you\'ve found this plugin useful, consider being one of the people that supports its continued development by donating here:</p>
 				<p>
@@ -138,7 +138,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				$composite_key = $country['country_id'] . '|' . $country['region_id'];
 				$country_desc = $country['country_name'];
 				if ( isset( $country['region_id'] ) ) {
-					$country_desc .= ", " . $country['region_name'];
+					$country_desc .= ', ' . $country['region_name'];
 				}
 				$output .= '<option value="'.$composite_key.'">'.$country_desc.'</option>';
 			}
@@ -184,7 +184,6 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				</script>';
 			$output .= '</div>';
 			$output .= '</td></tr>';
-
 		}
 		return $output;
 	}
@@ -199,15 +198,15 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 */
 	function submit_form() {
 
-		if (!isset($_POST[$this->getInternalName().'_region']) ||
-			$_POST[$this->getInternalName().'_region'] == "") {
+		if ( ! isset( $_POST[$this->getInternalName() . '_region'] ) ||
+			$_POST[$this->getInternalName() . '_region'] == '' ) {
 			return FALSE;
 		}
 
 		// Get current settings array
-		$shipping = get_option($this->getInternalName().'_options');
-		if (!$shipping) {
-			unset($shipping);
+		$shipping = get_option( $this->getInternalName() . '_options' );
+		if ( ! $shipping ) {
+			unset( $shipping );
 		}
 
 		$region = $_POST[$this->getInternalName().'_region'];
@@ -217,20 +216,18 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		$new_shipping = array();
 
 		// Build submitted data into correct format
-		for ($i = 0; $i < count($weights); $i++) {
-
+		for ($i = 0; $i < count( $weights ); $i++) {
 			// Ignore blank rates
-			if (isset($rates[$i]) && $rates[$i] != "") {
+			if ( isset( $rates[$i] ) && $rates[$i] != '') {
 				$new_shipping[$weights[$i]] = $rates[$i];
 			}
-
 		}
 
-		if (count($new_shipping)) {
-			krsort($new_shipping, SORT_NUMERIC);
+		if ( count( $new_shipping ) ) {
+			krsort( $new_shipping, SORT_NUMERIC );
 		}
 		$shipping[$region] = $new_shipping;
-		update_option($this->getInternalName().'_options', $shipping);
+		update_option( $this->getInternalName() . '_options', $shipping );
 
 		return true;
 
@@ -248,18 +245,18 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	function save_quote_method() {
 
 		// Called via Ajax if the quote method is changed
-		if (!isset($_POST['quote_method'])) {
+		if ( ! isset( $_POST['quote_method'] ) ) {
 			return FALSE;
 		}
 
-		$options = get_option($this->getInternalName().'_options');
-		if (!$options) {
-			unset($option);
+		$options = get_option( $this->getInternalName() . '_options' );
+		if ( ! $options ) {
+			unset( $option );
 		}
 
 		$options['quote_method'] = $_POST['quote_method'];
 
-		update_option($this->getInternalName().'_options', $options);
+		update_option( $this->getInternalName() . '_options', $options );
 
 	}
 
@@ -285,55 +282,43 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 
 		// If we're calculating a price based on a product, and that the store has shipping enabled
 
-		if (is_numeric($product_id) && (get_option('do_not_use_shipping') != 1)) {
+		if ( is_numeric( $product_id ) && ( get_option( 'do_not_use_shipping' ) != 1 ) ) {
 
 			$country_id = $this->validate_posted_country_info();
 
 			$country_code = $_SESSION['wpsc_delivery_country'];
-			if (isset($_SESSION['wpsc_delivery_region'])) {
+			if ( isset( $_SESSION['wpsc_delivery_region'] ) ) {
 				$region_id = $_SESSION['wpsc_delivery_region'];
 			} else {
 				$region_id = '';
 			}
 
-			$product_list = get_post_meta ( $product_id, '_wpsc_product_metadata', TRUE );
+			$product_list = get_post_meta( $product_id, '_wpsc_product_metadata', TRUE );
 
 			$no_shipping = $product_list['no_shipping'];
 			$local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
 			$international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
 
 			// If the item has shipping enabled
-			if ($no_shipping == 0) {
-
-				if ($country_code == get_option('base_country')) {
-
+			if ( $no_shipping == 0 ) {
+				if ( $country_code == get_option( 'base_country' ) ) {
 					// Pick up the price from "Local Shipping Fee" on the product form
 					$additional_shipping = $local_shipping;
-
 				} else {
-
 					// Pick up the price from "International Shipping Fee" on the product form
 					$additional_shipping = $international_shipping;
-
 				}
 
 				// Item shipping charges are per unit quantity
 				$shipping = $quantity * $additional_shipping;
-
 			} else {
-
 				//if the item does not have shipping
 				$shipping = 0;
-
 			}
-
 		} else {
-
 			//if the item is invalid or store is set not to use shipping
 			$shipping = 0;
-
 		}
-
 		return $shipping;
 	}
 
@@ -381,7 +366,6 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 
 		if ( ! isset( $options['quote_method'] ) ||
 			$options['quote_method'] == 'total' ) {
-
 			// Get the cart weight
 			$weight = wpsc_cart_weight_total();
 

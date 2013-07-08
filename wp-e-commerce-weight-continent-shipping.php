@@ -131,7 +131,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function getForm() {
 
-		$settings_element = "div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update";
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update';
 
         if ( isset( $_POST['region'] ) && $_POST['region'] != '' ) {
             $output = $this->show_layers_form( $_POST['region'] );
