@@ -78,7 +78,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
      */
     function show_layers_form() {
 
-		$settings_element = 'div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update"';
+		$settings_element = 'div#wpsc_shipping_settings_ses_weightregion_shipping_form input.edit-shipping-module-update';
 
         $shipping = get_option( $this->getInternalName() . '_options' );
 
@@ -178,19 +178,19 @@ class ses_weightregion_shipping extends ses_weightregion_module {
                 $options['quote_method'] = 'total';
             }
             $output .= '<br/>Prices based on:<br/>';
-            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="quote_method" value="total" '.($options['quote_method'] == 'total' ? 'checked' : '').'>Single quote for total cart weight<br>';
-            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="quote_method" value="items" '.($options['quote_method'] == 'items' ? 'checked' : '').'>Sum of quotes for individual items<br>';
-            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked' : '').'>Sum of quotes for consolidated items<br>';
+            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="total" '.($options['quote_method'] == 'total' ? 'checked' : '').'>Single quote for total cart weight<br>';
+            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="items" '.($options['quote_method'] == 'items' ? 'checked' : '').'>Sum of quotes for individual items<br>';
+            $output .= '<input type="radio" class="ses-weightregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked' : '').'>Sum of quotes for consolidated items<br>';
             $output .= '
                 <script type="text/javascript">
-                jQuery("input[name=\'quote_method\']").change(function() {
-                        jQuery.ajax( { url: "admin-ajax.php",
-                                       type: "post",
-                                       data: "action=ses-weightregion-quote-method&quote_method="+jQuery("input[name=\'quote_method\']:checked").val()
-                                       }
-                            )
-                        }
-                        );
+                jQuery("input[name=\''.$this->getInternalName().'_quote_method\']").change(function() {
+                        jQuery.ajax(
+                            {
+                            	url: "admin-ajax.php",
+                                type: "post",
+                                data: "action=ses-weightregion-quote-method&quote_method="+jQuery("input[name=\''.$this->getInternalName().'_quote_method\']:checked").val()
+                            }
+                        )});
                 </script>';
             $output .= '</div>';
             $output .= '</td></tr>';

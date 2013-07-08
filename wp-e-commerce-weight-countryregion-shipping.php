@@ -102,9 +102,8 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		echo '<br/>';
 		echo '<a id="ses-weightcountryregion-newlayer">New Layer</a>';
 		echo '<script type="text/javascript">
-			jQuery("'.$settings_element.'").show();
+    	          jQuery("'.$settings_element.'").show();
 		      </script>';
-
 		exit();
 
 	}
@@ -174,10 +173,10 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 			$output .= '<input type="radio" class="ses-weightcountryregion-quote-method" name="'.$this->getInternalName().'_quote_method" value="consolidateditems" '.($options['quote_method'] == 'consolidateditems' ? 'checked="checked"' : '').'>Sum of quotes for consolidated items<br>';
 			$output .= '
 		        <script type="text/javascript">
-				jQuery("input[name=\'quote_method\']").change(function() {
+				jQuery("input[name=\''.$this->getInternalName().'_quote_method\']").change(function() {
 					jQuery.ajax( { url: "admin-ajax.php",
 						           type: "post",
-								   data: "action=ses-weightcountryregion-quote-method&quote_method="+jQuery("input[name=\'quote_method\']:checked").val(),
+								   data: "action=ses-weightcountryregion-quote-method&quote_method="+jQuery("input[name=\''.$this->getInternalName().'_quote_method\']:checked").val(),
 								 }
 							   )
 					}
