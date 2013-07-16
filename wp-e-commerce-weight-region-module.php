@@ -11,9 +11,10 @@ abstract class ses_weightregion_module {
 
 
 
-    protected $internal_name;
-    protected $name;
-    protected $is_external;
+	// FIXME - these should be protected, but can't enable that yet - FIXME add GH issue #
+    public $internal_name;
+    public $name;
+    public $is_external;
 
 
 

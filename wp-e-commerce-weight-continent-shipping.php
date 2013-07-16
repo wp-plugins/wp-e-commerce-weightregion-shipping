@@ -16,6 +16,22 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
     /**
      *
+     *
+     * @return unknown
+     */
+    function __construct() {
+
+        $this->internal_name = 'ses_weightregion_shipping';
+        $this->name = 'Weight / Continent Shipping';
+        $this->is_external = FALSE;
+        $this->ses_weightregion_getregions();
+        return true;
+    }
+
+
+
+    /**
+     *
      */
     function ses_weightregion_getregions() {
 
@@ -51,22 +67,6 @@ class ses_weightregion_shipping extends ses_weightregion_module {
         }
         $this->region_list = $results;
 
-    }
-
-
-
-    /**
-     *
-     *
-     * @return unknown
-     */
-    function ses_weightregion_shipping() {
-
-        $this->internal_name = 'ses_weightregion_shipping';
-        $this->name = 'Weight / Continent Shipping';
-        $this->is_external = FALSE;
-        $this->ses_weightregion_getregions();
-        return true;
     }
 
 
@@ -327,7 +327,7 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
 
     /**
-     * This function returns an Array of possible shipping choices, and associated costs.
+     * This function returns an array of possible shipping choices, and associated costs.
      * This is for the cart in general, per item charges (As returned from get_item_shipping (above))
      * will be added on as well.
      *
@@ -337,17 +337,22 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
         global $wpdb, $wpsc_cart;
 
-        $country_id = $this->validate_posted_country_info();
-        $country = isset( $_SESSION['wpsc_delivery_country'] ) ? $_SESSION['wpsc_delivery_country'] : '';
+        $this->validate_posted_country_info();
+        $country_id = $this->get_shipping_var( 'ses_ps_delivery_country_id' );
+        $country = $this->get_shipping_var( 'shipping_country' );
 
         // Retrieve the options set by submit_form() above
         $options = get_option( $this->getInternalName() . '_options' );
 
+        // Work out which continent this country is in
         $results = $wpdb->get_var(
-            'SELECT `continent`
-               FROM `'.WPSC_TABLE_CURRENCY_LIST.'`
-              WHERE `isocode` IN("' . $country . '")
-              LIMIT 1'
+        	$wpdb->prepare(
+        	 'SELECT `continent`
+                FROM `'.WPSC_TABLE_CURRENCY_LIST.'`
+               WHERE `isocode` = %s
+               LIMIT 1',
+             $country
+            )
         );
         $region = $results;
 
