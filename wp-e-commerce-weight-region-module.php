@@ -149,8 +149,6 @@ abstract class ses_weightregion_module {
             $this->set_shipping_var( 'shipping_region',null );
         }
 
-        return; //FIXME callers are expecting a country ID
-
     }
 
 
