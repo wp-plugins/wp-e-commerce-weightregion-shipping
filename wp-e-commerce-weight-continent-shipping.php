@@ -274,59 +274,6 @@ class ses_weightregion_shipping extends ses_weightregion_module {
 
 
     /**
-     * If there is a per-item shipping charge that applies irrespective of the chosen shipping method
-     * then it should be calculated and returned here. The value returned from this function is used
-     * as-is on the product pages. It is also included in the final cart & checkout figure along
-     * with the results from GetQuote (below)
-     *
-     * @param unknown $cart_item (reference)
-     * @return unknown
-     */
-    function get_item_shipping( &$cart_item ) {
-
-        global $wpdb;
-
-        $product_id = $cart_item->product_id;
-        $quantity = $cart_item->quantity;
-        $weight = $cart_item->weight;
-        $unit_price = $cart_item->unit_price;
-
-        // If we're calculating a price based on a product, and that the store has shipping enabled
-
-        if ( is_numeric( $product_id ) && ( get_option( 'do_not_use_shipping' ) != 1 ) ) {
-            $country_id = $this->validate_posted_country_info();
-            $country_code = $_SESSION['wpsc_delivery_country'];
-            $product_list = get_post_meta( $product_id, '_wpsc_product_metadata', TRUE );
-            $no_shipping = $product_list['no_shipping'];
-            $local_shipping = isset ( $product_list['shipping']['local'] ) ? $product_list['shipping']['local'] : 0;
-            $international_shipping = isset ( $product_list['shipping']['international'] ) ? $product_list['shipping']['international'] : 0;
-
-            // If the item has shipping enabled
-            if ( $no_shipping == 0 ) {
-                if ( $country_code == get_option( 'base_country' ) ) {
-                    // Pick up the price from "Local Shipping Fee" on the product form
-                    $additional_shipping = $local_shipping;
-                } else {
-                    // Pick up the price from "International Shipping Fee" on the product form
-                    $additional_shipping = $international_shipping;
-                }
-
-                // Item shipping charges are per unit quantity
-                $shipping = $quantity * $additional_shipping;
-            } else {
-                //if the item does not have shipping
-                $shipping = 0;
-            }
-        } else {
-            //if the item is invalid or store is set not to use shipping
-            $shipping = 0;
-        }
-        return $shipping;
-    }
-
-
-
-    /**
      * This function returns an array of possible shipping choices, and associated costs.
      * This is for the cart in general, per item charges (As returned from get_item_shipping (above))
      * will be added on as well.
