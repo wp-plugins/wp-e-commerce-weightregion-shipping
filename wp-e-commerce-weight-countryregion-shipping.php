@@ -17,7 +17,6 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 	 * @return unknown
 	 */
 	function __construct() {
-
 		$this->internal_name = 'ses_weightcountryregion_shipping';
 		$this->name = 'Weight / Country and Region Shipping';
 		$this->is_external = FALSE;
@@ -50,10 +49,7 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 				$results[$composite_key] = $country;
 			}
 		}
-
 		$this->countryregion_list = $results;
-
-		return;
 
 	}
 
@@ -328,10 +324,10 @@ class ses_weightcountryregion_shipping extends ses_weightregion_module {
 		// Get the plugin options
 		$options = get_option( $this->getInternalName() . '_options' );
 
-		$country_id = $this->validate_posted_country_info();
-
-		$country = isset( $_SESSION['wpsc_delivery_country'] ) ? $_SESSION['wpsc_delivery_country'] : '';
-		$region = isset( $_SESSION['wpsc_delivery_region'] ) ? $_SESSION['wpsc_delivery_region'] : '';
+		$this->validate_posted_country_info();
+		$country_id = $this->get_shipping_var( 'ses_ps_delivery_country_id' );
+        $country = $this->get_shipping_var( 'shipping_country' );
+        $region = $this->get_shipping_var( 'shipping_region' );
 
 		$composite_key = $country_id . '|' . $region;
 
