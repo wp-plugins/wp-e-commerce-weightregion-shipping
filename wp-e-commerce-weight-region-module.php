@@ -11,7 +11,8 @@ abstract class ses_weightregion_module {
 
 
 
-	// FIXME - these should be protected, but can't enable that yet - FIXME add GH issue #
+	// FIXME - these should be protected, but can't enable that yet
+	// See https://github.com/wp-e-commerce/WP-e-Commerce/pull/572
     public $internal_name;
     public $name;
     public $is_external;
