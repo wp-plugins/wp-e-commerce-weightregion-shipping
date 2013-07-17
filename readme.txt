@@ -12,8 +12,8 @@ Shipping module for the WP E-Commerce system that offers weight based shipping t
 == Description ==
 
 This plugin provides two shipping modules for the WP E-Commerce system that offer shipping:
-- By weight and continent
-- By weight and country / region
+* By weight and continent
+* By weight and country / region
 
 Quotes can be calculated either by looking up the entire cart total weight against the configured weight bands, or alternatively
 by looking up each individual item, and summing up the individual costs.
