@@ -12,6 +12,7 @@ Shipping module for the WP E-Commerce system that offers weight based shipping t
 == Description ==
 
 This plugin provides two shipping modules for the WP E-Commerce system that offer shipping:
+
 * By weight and continent
 * By weight and country / region
 
@@ -21,6 +22,8 @@ by looking up each individual item, and summing up the individual costs.
 Both modules can be used at the same time - see (http://www.leewillis.co.uk/region-based-shipping-wp-e-commerce/)
 
 This plugin also provides an online tool to allow you to split countries into whatever regions are relevant for your business.
+
+**Note:** This plugin requires WP e-Commerce 3.8.12 or above
 
 == Installation ==
 
