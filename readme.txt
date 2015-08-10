@@ -3,7 +3,7 @@ Contributors: leewillis77
 Donate link: http://plugins.leewillis.co.uk/donate/
 Tags: e-commerce, shipping
 Requires at least: 3.5
-Tested up to: 3.5.2
+Tested up to: 4.3
 Stable tag: 5.0
 License: GPLv2
 
